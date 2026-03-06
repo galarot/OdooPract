@@ -1,9 +1,10 @@
 from datetime import timedelta
-from odoo import api, fields, models
+from odoo import api, fields, models, exceptions
 
 class EstatePropertyOffer(models.Model):
     _name = "estate.property.offer"
     _description = "Property Offer"
+    _order = "price desc"
     
     _sql_constraints = [
         ('check_price', 'CHECK(price > 0)', 'The offer price must be strictly positive.')
@@ -16,9 +17,22 @@ class EstatePropertyOffer(models.Model):
     )
     partner_id = fields.Many2one("res.partner", string="Partner", required=True)
     property_id = fields.Many2one("estate.property", string="Property", required=True)
-
+    property_type_id = fields.Many2one(
+        related="property_id.property_type_id", string="Property Type", store=True
+    )
     validity = fields.Integer(default=7, string="Validity (days)")
     date_deadline = fields.Date(compute="_compute_date_deadline", inverse="_inverse_date_deadline", string="Deadline")
+
+    @api.model
+    def create(self, vals):
+        prop = self.env['estate.property'].browse(vals['property_id'])
+        
+        if prop.offer_ids:
+            if any(vals['price'] < offer.price for offer in prop.offer_ids):
+                raise exceptions.UserError("No puedes crear una oferta con un precio inferior a una ya existente.")
+        
+        prop.state = 'offer_received'
+        return super().create(vals)
 
     @api.depends("create_date", "validity")
     def _compute_date_deadline(self):
@@ -29,17 +43,18 @@ class EstatePropertyOffer(models.Model):
     def _inverse_date_deadline(self):
         for record in self:
             start_date = record.create_date.date() if record.create_date else fields.Date.today()
-            record.validity = (record.date_deadline - start_date).days
+            if record.date_deadline:
+                record.validity = (record.date_deadline - start_date).days
   
     def action_accept(self):
         for record in self:
             record.status = 'accepted'
             record.property_id.selling_price = record.price
             record.property_id.buyer_id = record.partner_id
+            record.property_id.state = 'offer_accepted'
         return True
 
     def action_refuse(self):
         for record in self:
             record.status = 'refused'
         return True
-    
