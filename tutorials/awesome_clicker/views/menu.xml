@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_awesome_clicker" model="ir.actions.client">
+        <field name="name">Awesome Clicker</field>
+        <field name="tag">awesome_clicker.clicker</field>
+    </record>
+
+    <menuitem id="menu_awesome_clicker_root"
+              name="Awesome Clicker"
+              action="action_awesome_clicker"
+              groups="base.group_user"
+              sequence="10"/>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="awesome_owl.playground">
+        <div class="p-3">
+            <h3>Counters with Sum</h3>
+            <Counter onChange.bind="incrementSum"/>
+            <Counter onChange.bind="incrementSum"/>
+            <p>Sum: <t t-esc="state.sum"/></p>
+            
+            <hr/>
+            <h3>Cards with Slots</h3>
+            <Card title="'Counter Card'">
+                <Counter/>
+            </Card>
+            <Card title="'HTML Content'">
+                <t t-out="html"/>
+            </Card>
+            <Card title="'Simple Text'">
+                <p>This is simple text content in a card</p>
+            </Card>
+            
+            <hr/>
+            <h3>Todo List</h3>
+            <TodoList/>
+        </div>
+    </t>
+
+</templates>

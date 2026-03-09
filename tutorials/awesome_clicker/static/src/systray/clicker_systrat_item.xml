@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="awesome_clicker.ClickerSystray">
+        <div class="o_systray_item px-3">
+            <span>Clicks: 0</span>
+            <button class="btn btn-sm btn-primary ms-2">+</button>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="awesome_clicker.AwesomeClicker">
+        <div class="p-3">
+            <h1>Awesome Clicker Game</h1>
+            <p>Click the button to start playing!</p>
+        </div>
+    </t>
+
+</templates>

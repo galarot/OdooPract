@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="awesome_owl.Card">
+        <div class="card d-inline-block m-2" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <t t-esc="props.title"/>
+                    <button class="btn btn-sm btn-secondary float-end" t-on-click="toggleContent">
+                        <i t-if="state.isOpen" class="fa fa-chevron-up"/>
+                        <i t-else="" class="fa fa-chevron-down"/>
+                    </button>
+                </h5>
+                <div t-if="state.isOpen" class="card-text">
+                    <t t-slot="default"/>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
