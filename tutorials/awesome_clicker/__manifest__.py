@@ -23,9 +23,17 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'awesome_clicker/static/src/**/*',
+            'awesome_clicker/static/src/dummy_clicker_service.js',
+            'awesome_clicker/static/src/utils.js',
+            'awesome_clicker/static/src/click_rewards.js',
+            'awesome_clicker/static/src/clicker_model.js',
+            'awesome_clicker/static/src/clicker_service.js',
+            'awesome_clicker/static/src/clicker_hook.js',
+            'awesome_clicker/static/src/click_value/**/*',
+            'awesome_clicker/static/src/clicker/**/*',
+            'awesome_clicker/static/src/systray/**/*',
+            'awesome_clicker/static/src/clicker_patch.js',
         ],
-
     },
     'license': 'AGPL-3'
 }

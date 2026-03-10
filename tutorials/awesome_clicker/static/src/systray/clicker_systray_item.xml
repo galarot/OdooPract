@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="awesome_clicker.ClickerSystray">
+        <div class="o_systray_item px-3 d-flex align-items-center">
+            <span>Clicks: <t t-esc="clicker.clicks"/></span>
+            <button class="btn btn-sm btn-primary ms-2" t-on-click="increment">+</button>
+            <button class="btn btn-sm btn-secondary ms-2" t-on-click="openClientAction">Open</button>
+        </div>
+    </t>
+</templates>

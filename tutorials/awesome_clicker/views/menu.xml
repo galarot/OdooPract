@@ -8,6 +8,5 @@
     <menuitem id="menu_awesome_clicker_root"
               name="Awesome Clicker"
               action="action_awesome_clicker"
-              groups="base.group_user"
               sequence="10"/>
 </odoo>

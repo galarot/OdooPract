@@ -1,11 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<templates xml:space="preserve">
-
-    <t t-name="awesome_clicker.AwesomeClicker">
-        <div class="p-3">
-            <h1>Awesome Clicker Game</h1>
-            <p>Click the button to start playing!</p>
+<t t-name="awesome_clicker.AwesomeClicker">
+    <div class="p-3 text-center">
+        <h1>Awesome Clicker Game</h1>
+        <div class="display-1 my-4">
+            <t t-esc="clicker.clicks"/> Clicks
         </div>
-    </t>
+        
+        <button class="btn btn-lg btn-success mb-5" t-on-click="() => this.clicker.increment(1000)">
+            Increment +1000
+        </button>
 
-</templates>
+        <div class="border-top pt-4">
+            <div t-if="clicker.level gte 1" class="mb-3">
+                <h3>ClickBots: <t t-esc="clicker.clickBots"/> (10 clicks/10s)</h3>
+                <button class="btn btn-primary" 
+                        t-att-disabled="clicker.clicks lt 1000"
+                        t-on-click="() => this.clicker.buyClickBot()">
+                    Buy ClickBot (1k)
+                </button>
+            </div>
+
+            <div t-if="clicker.level gte 2" class="mb-3">
+                <h3>BigBots: <t t-esc="clicker.bigBots"/> (100 clicks/10s)</h3>
+                <button class="btn btn-warning" 
+                        t-att-disabled="clicker.clicks lt 5000"
+                        t-on-click="() => this.clicker.buyBigBot()">
+                    Buy BigBot (5k)
+                </button>
+            </div>
+
+            <div t-if="clicker.level gte 3">
+                <h3>Power Multiplier: x<t t-esc="clicker.multiplier"/></h3>
+                <button class="btn btn-info" 
+                        t-att-disabled="clicker.clicks lt 50000"
+                        t-on-click="() => this.clicker.buyMultiplier()">
+                    Buy Power Level (50k)
+                </button>
+            </div>
+        </div>
+    </div>
+</t>
