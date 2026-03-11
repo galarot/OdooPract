@@ -33,6 +33,7 @@
             'awesome_clicker/static/src/clicker/**/*',
             'awesome_clicker/static/src/systray/**/*',
             'awesome_clicker/static/src/clicker_patch.js',
+            'awesome_clicker/static/src/clicker_commands.js',
         ],
     },
     'license': 'AGPL-3'

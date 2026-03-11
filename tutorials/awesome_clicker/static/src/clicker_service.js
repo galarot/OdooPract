@@ -8,5 +8,4 @@ const clickerService = {
     },
 };
 
-// Registramos el servicio
 registry.category("services").add("awesome_clicker.clicker_service", clickerService);

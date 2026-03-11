@@ -3,8 +3,10 @@ import { Component, onWillDestroy } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useClicker } from "../clicker_hook";
 import { useService } from "@web/core/utils/hooks";
+import { Notebook } from "@web/core/notebook/notebook";
 
 export class AwesomeClicker extends Component {
+    static components = { Notebook };
     static template = "awesome_clicker.AwesomeClicker";
 
     setup() {
