@@ -24,6 +24,7 @@
     'assets': {
         'web.assets_backend': [
             'awesome_clicker/static/src/dummy_clicker_service.js',
+            'awesome_clicker/static/src/styles.js',
             'awesome_clicker/static/src/utils.js',
             'awesome_clicker/static/src/click_rewards.js',
             'awesome_clicker/static/src/clicker_model.js',

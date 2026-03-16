@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="awesome_clicker.AwesomeClicker" owl="1">
-        <div class="p-3 text-center">
+        <div class="p-3 text-center awesome_clicker_container">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1>Awesome Clicker Game</h1>
                 <button class="btn btn-danger" t-on-click="() => this.clicker.reset()">
@@ -16,17 +16,34 @@
                 Increment +100
             </button>
 
+            <button t-if="(clicker.clicks >= 50000000 and clicker.rebirthLevel == 0) or (clicker.clicks >= 300000000 and clicker.rebirthLevel == 1) or (clicker.clicks >= 750000000 and clicker.rebirthLevel == 2)" class="btn btn-lg btn-danger ms-2 mb-5" t-on-click="() => this.clicker.rebirth()">
+                Rebirth (x<t t-esc="clicker.rebirthLevel + 1"/>)
+            </button>
+            <span t-if="clicker.rebirthLevel > 0" class="ms-3 badge bg-warning p-2">Rebirth Level: <t t-esc="clicker.rebirthLevel"/> (x<t t-esc="clicker.rebirthMultiplier"/>)</span>
+
+            <div class="my-4">
+                <img t-att-src="'/awesome_clicker/static/src/img/' + clicker.getGokuPhase() + '.png'" 
+                     style="max-width: 300px; height: auto;" 
+                     alt="Goku Evolution"/>
+            </div>
+
             <Notebook orientation="'horizontal'">
                 <t t-set-slot="page_1" title="'Clicks'" isVisible="true">
                     <div class="border-top pt-4">
+                        <div class="mb-3">
+                            <h3>SuperBots: <t t-esc="clicker.superBots"/> (1 click/s)</h3>
+                            <button class="btn btn-success" t-att-disabled="clicker.clicks &lt; 500" t-on-click="() => this.clicker.buySuperBot()">
+                                Buy SuperBot (500)
+                            </button>
+                        </div>
                         <div t-if="clicker.level >= 1" class="mb-3">
-                            <h3>ClickBots: <t t-esc="clicker.clickBots"/> (10 clicks/10s)</h3>
+                            <h3>ClickBots: <t t-esc="clicker.clickBots"/> (100 clicks/10s)</h3>
                             <button class="btn btn-primary" t-att-disabled="clicker.clicks &lt; 1000" t-on-click="() => this.clicker.buyClickBot()">
                                 Buy ClickBot (1k)
                             </button>
                         </div>
                         <div t-if="clicker.level >= 2" class="mb-3">
-                            <h3>BigBots: <t t-esc="clicker.bigBots"/> (100 clicks/10s)</h3>
+                            <h3>BigBots: <t t-esc="clicker.bigBots"/> (1000 clicks/10s)</h3>
                             <button class="btn btn-warning" t-att-disabled="clicker.clicks &lt; 5000" t-on-click="() => this.clicker.buyBigBot()">
                                 Buy BigBot (5k)
                             </button>
