@@ -11,7 +11,7 @@
             <div class="display-1 my-4">
                 <t t-esc="clicker.clicks"/> Clicks
             </div>
-            
+
             <button class="btn btn-lg btn-success mb-5" t-on-click="() => this.clicker.increment(100)">
                 Increment +100
             </button>
@@ -21,10 +21,13 @@
             </button>
             <span t-if="clicker.rebirthLevel > 0" class="ms-3 badge bg-warning p-2">Rebirth Level: <t t-esc="clicker.rebirthLevel"/> (x<t t-esc="clicker.rebirthMultiplier"/>)</span>
 
-            <div class="my-4">
-                <img t-att-src="'/awesome_clicker/static/src/img/' + clicker.getGokuPhase() + '.png'" 
-                     style="max-width: 300px; height: auto;" 
+            <div class="my-4 d-flex justify-content-center align-items-center gap-4">
+                <img t-att-src="'/awesome_clicker/static/src/img/' + clicker.getGokuPhase() + '.png'"
+                     style="max-width: 300px; height: auto;"
                      alt="Goku Evolution"/>
+                <div t-if="clicker.gokuEvolutions > 0" class="badge bg-success p-3 fs-6">
+                    Bonificación por fase +<t t-esc="clicker.phaseFarmPerSecond"/> clicks/s
+                </div>
             </div>
 
             <Notebook orientation="'horizontal'">
@@ -57,39 +60,31 @@
                     </div>
                 </t>
 
-                <t t-set-slot="page_2" title="'Trees and Fruits'" isVisible="true">
+                <t t-set-slot="page_2" title="'Ki Farm'" isVisible="true">
                     <div class="border-top pt-4">
-                        <div t-if="clicker.clicks >= 1000000 or clicker.totalTrees > 0" class="mb-3">
-                            <h3>Trees</h3>
-                            <div class="row justify-content-center">
-                                <div class="col-auto card m-2 p-3">
-                                    <p><t t-esc="clicker.trees.pear"/>x pearTree (1 pear /30s)</p>
-                                    <button class="btn btn-info" t-att-disabled="clicker.clicks &lt; 1000000" t-on-click="() => this.clicker.buyTree('pear')">
-                                        Buy pearTree (1M)
-                                    </button>
-                                </div>
-                                <div class="col-auto card m-2 p-3">
-                                    <p><t t-esc="clicker.trees.cherry"/>x cherryTree (1 cherry /30s)</p>
-                                    <button class="btn btn-info" t-att-disabled="clicker.clicks &lt; 1000000" t-on-click="() => this.clicker.buyTree('cherry')">
-                                        Buy cherryTree (1M)
-                                    </button>
-                                </div>
-                                <div class="col-auto card m-2 p-3">
-                                    <p><t t-esc="clicker.trees.peach"/>x peachTree (1 peach /30s)</p>
-                                    <button class="btn btn-info" t-att-disabled="clicker.clicks &lt; 1500000" t-on-click="() => this.clicker.buyTree('peach')">
-                                        Buy peachTree (1.5M)
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <h3>Ki: <t t-esc="clicker.ki"/></h3>
+                            <p class="text-muted">Goku evoluciona para generar Ki</p>
                         </div>
+                        <div class="mb-3">
+                            <button class="btn btn-success btn-lg" t-att-disabled="clicker.ki &lt; 500" t-on-click="() => this.clicker.buyClicksWithKi()">
+                                Buy 5M Clicks (500 Ki)
+                            </button>
+                        </div>
+                    </div>
+                </t>
 
-                        <div t-if="clicker.totalFruits > 0" class="mb-3">
-                            <h3>Fruits Collected</h3>
-                            <div class="d-flex justify-content-center gap-3">
-                                <span class="badge bg-secondary p-2"><t t-esc="clicker.fruits.pear"/> Pears</span>
-                                <span class="badge bg-secondary p-2"><t t-esc="clicker.fruits.cherry"/> Cherries</span>
-                                <span class="badge bg-secondary p-2"><t t-esc="clicker.fruits.peach"/> Peaches</span>
-                            </div>
+                <t t-set-slot="page_3" title="'Cámara del Tiempo'" isVisible="true">
+                    <div class="border-top pt-4">
+                        <div class="mb-3">
+                            <h3>⏰ Cámara del Tiempo</h3>
+                            <p class="text-muted">Simula 10 minutos de progreso instantáneamente</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-info">Costo: 10k Ki</p>
+                            <button class="btn btn-primary btn-lg" t-att-disabled="clicker.ki &lt; 10000" t-on-click="() => this.clicker.timeChamber()">
+                                Activar Cámara del Tiempo
+                            </button>
                         </div>
                     </div>
                 </t>

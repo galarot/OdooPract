@@ -3,26 +3,22 @@
     <t t-name="awesome_clicker.ClickerSystray">
         <div class="o_systray_item px-3 d-flex align-items-center">
             <span>Clicks: <t t-esc="clicker.clicks"/></span>
+            <span class="ms-2 badge bg-info">Ki: <t t-esc="clicker.ki"/></span>
             <button class="btn btn-sm btn-primary ms-2" t-on-click="increment">+</button>
-            
+
             <Dropdown class="'ms-2'">
                 <t t-set-slot="toggler">
                     <button class="btn btn-sm btn-secondary">Open</button>
                 </t>
-                
+
                 <t t-set-slot="default">
                     <div class="p-3" style="min-width: 250px;">
                         <div class="d-flex flex-column gap-2">
                             <button class="btn btn-sm btn-primary w-100" t-on-click="openClientAction">Open Clicker Game</button>
                             <hr/>
-                            
                             <div class="small">
-                                <div><strong>Trees:</strong></div>
-                                <div><t t-esc="clicker.trees.pear"/>x Pear Tree</div>
-                                <div><t t-esc="clicker.trees.cherry"/>x Cherry Tree</div>
-                                <div class="mt-2"><strong>Fruits:</strong></div>
-                                <div><t t-esc="clicker.fruits.pear"/>x Pear</div>
-                                <div><t t-esc="clicker.fruits.cherry"/>x Cherry</div>
+                                <div><strong>Ki:</strong> <t t-esc="clicker.ki"/></div>
+                                <div><strong>Goku Evolutions:</strong> <t t-esc="clicker.gokuEvolutions"/></div>
                             </div>
                         </div>
                     </div>

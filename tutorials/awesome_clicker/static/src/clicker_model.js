@@ -4,18 +4,22 @@ import { EventBus } from "@odoo/owl";
 import { getReward } from "@awesome_clicker/click_rewards";
 import { browser } from "@web/core/browser/browser";
 
-const CURRENT_VERSION = 2;
+const CURRENT_VERSION = 3;
 
 const MIGRATIONS = [{
     fromVersion: 1,
     toVersion: 2,
     apply: (state) => {
-        if (state.trees && !state.trees.peach) {
-            state.trees.peach = 0;
-        }
-        if (state.fruits && !state.fruits.peach) {
-            state.fruits.peach = 0;
-        }
+        return state;
+    }
+}, {
+    fromVersion: 2,
+    toVersion: 3,
+    apply: (state) => {
+        state.ki = 0;
+        state.gokuEvolutions = 0;
+        delete state.trees;
+        delete state.fruits;
         return state;
     }
 }];
@@ -29,6 +33,7 @@ export class ClickerModel extends Reactive {
 
         Object.assign(this, data);
         this.bus = new EventBus();
+        this._lastGokuPhase = this.getGokuPhase();
 
         this._setupIntervals(storageKey);
     }
@@ -44,7 +49,6 @@ export class ClickerModel extends Reactive {
                 data = this._getDefaultState();
             }
 
-            // Validar que todos los valores sean números válidos
             data.clicks = Number(data.clicks) || 0;
             data.level = Number(data.level) || 0;
             data.clickBots = Number(data.clickBots) || 0;
@@ -53,8 +57,8 @@ export class ClickerModel extends Reactive {
             data.multiplier = Number(data.multiplier) || 1;
             data.rebirthLevel = Number(data.rebirthLevel) || 0;
             data.rebirthMultiplier = Number(data.rebirthMultiplier) || 1;
-            data.trees = data.trees || { pear: 0, cherry: 0, peach: 0 };
-            data.fruits = data.fruits || { pear: 0, cherry: 0, peach: 0 };
+            data.ki = Number(data.ki) || 0;
+            data.gokuEvolutions = Number(data.gokuEvolutions) || 0;
 
             return data;
         } catch (e) {
@@ -75,8 +79,8 @@ export class ClickerModel extends Reactive {
             multiplier: 1,
             rebirthLevel: 0,
             rebirthMultiplier: 1,
-            trees: { pear: 0, cherry: 0, peach: 0 },
-            fruits: { pear: 0, cherry: 0, peach: 0 },
+            ki: 0,
+            gokuEvolutions: 0,
         };
     }
 
@@ -96,6 +100,11 @@ export class ClickerModel extends Reactive {
         return state;
     }
 
+    // Clicks por segundo que genera la bonificación por fase
+    get phaseFarmPerSecond() {
+        return this.gokuEvolutions * 10 * this.multiplier;
+    }
+
     _setupIntervals(storageKey) {
         setInterval(() => {
             this.clicks += ((this.clickBots * 100) + (this.bigBots * 1000)) * this.multiplier;
@@ -104,24 +113,11 @@ export class ClickerModel extends Reactive {
         }, 10000);
 
         setInterval(() => {
-            this.clicks += (this.superBots * 1) * this.multiplier;
+            // SuperBots + bonificación por fase, ambos cada segundo
+            this.clicks += (this.superBots * 1 * this.multiplier) + this.phaseFarmPerSecond;
             this._checkMilestones();
             this._saveState(storageKey);
         }, 1000);
-
-        setInterval(() => {
-            this.fruits.pear += this.trees.pear;
-            this.fruits.cherry += this.trees.cherry;
-            this.fruits.peach += this.trees.peach;
-        }, 30000);
-
-        setInterval(() => {
-            const reward = getReward(this.level);
-            if (reward) {
-                reward.apply(this);
-                this.bus.trigger("REWARD_RECEIVED", { description: reward.description });
-            }
-        }, 30000);
     }
 
     _saveState(key) {
@@ -135,19 +131,10 @@ export class ClickerModel extends Reactive {
             multiplier: this.multiplier,
             rebirthLevel: this.rebirthLevel,
             rebirthMultiplier: this.rebirthMultiplier,
-            trees: this.trees,
-            fruits: this.fruits,
+            ki: this.ki,
+            gokuEvolutions: this.gokuEvolutions,
         };
         browser.localStorage.setItem(key, JSON.stringify(stateToSave));
-    }
-
-    buyTree(type) {
-        const price = type === 'peach' ? 1500000 : 1000000;
-        if (this.clicks >= price) {
-            this.clicks -= price;
-            this.trees[type] += 1;
-            this._checkMilestones();
-        }
     }
 
     increment(inc) {
@@ -175,7 +162,6 @@ export class ClickerModel extends Reactive {
         if (this.clicks >= 500) {
             this.clicks -= 500;
             this.superBots += 1 * this.rebirthMultiplier;
-            console.log(`SuperBot nivel ${this.superBots} alcanzado`);
             this._checkMilestones();
         }
     }
@@ -195,15 +181,12 @@ export class ClickerModel extends Reactive {
         if (this.clicks >= 50000000 && this.rebirthLevel < 1) {
             newRebirthLevel = 1;
             newRebirthMultiplier = 2;
-            console.log(`Renacimiento 1 alcanzado - Multiplicador x2`);
         } else if (this.clicks >= 300000000 && this.rebirthLevel < 2) {
             newRebirthLevel = 2;
             newRebirthMultiplier = 3;
-            console.log(`Renacimiento 2 alcanzado - Multiplicador x3`);
         } else if (this.clicks >= 750000000 && this.rebirthLevel < 3) {
             newRebirthLevel = 3;
             newRebirthMultiplier = 4;
-            console.log(`Renacimiento 3 alcanzado - Multiplicador x4`);
         } else {
             return;
         }
@@ -216,16 +199,9 @@ export class ClickerModel extends Reactive {
         this.bigBots = 0;
         this.superBots = 0;
         this.multiplier = 1;
-        this.trees = { pear: 0, cherry: 0, peach: 0 };
-        this.fruits = { pear: 0, cherry: 0, peach: 0 };
-    }
-
-    get totalTrees() {
-        return this.trees.pear + this.trees.cherry + this.trees.peach;
-    }
-
-    get totalFruits() {
-        return this.fruits.pear + this.fruits.cherry + this.fruits.peach;
+        this.ki = 0;
+        this.gokuEvolutions = 0;
+        this._lastGokuPhase = 'basegoku';
     }
 
     getGokuPhase() {
@@ -266,6 +242,43 @@ export class ClickerModel extends Reactive {
         if (this.level > oldLevel) {
             this.bus.trigger("MILESTONE_REACHED");
         }
+
+        const newPhase = this.getGokuPhase();
+        if (newPhase !== this._lastGokuPhase) {
+            this._lastGokuPhase = newPhase;
+            this.evolveGoku();
+        }
+    }
+
+    evolveGoku() {
+        this.ki += 1000;
+        this.gokuEvolutions += 1;
+        this.bus.trigger("GOKU_EVOLVED", { kiGain: 1000 });
+    }
+
+    buyClicksWithKi() {
+        if (this.ki >= 500) {
+            this.ki -= 500;
+            this.clicks += 5000000;
+            this._checkMilestones();
+        }
+    }
+
+    timeChamber() {
+        if (this.ki >= 10000) {
+            this.ki -= 10000;
+
+            const superBotClicks = this.superBots * 1 * 600 * this.multiplier;
+            const clickBotClicks = this.clickBots * 100 * 60 * this.multiplier;
+            const bigBotClicks = this.bigBots * 1000 * 60 * this.multiplier;
+            const phaseFarmClicks = this.phaseFarmPerSecond * 600;
+
+            const totalClicks = superBotClicks + clickBotClicks + bigBotClicks + phaseFarmClicks;
+            this.clicks += totalClicks;
+
+            this._checkMilestones();
+            this.bus.trigger("TIME_CHAMBER_USED", { clicksGained: totalClicks });
+        }
     }
 
     reset() {
@@ -277,8 +290,9 @@ export class ClickerModel extends Reactive {
         this.multiplier = 1;
         this.rebirthLevel = 0;
         this.rebirthMultiplier = 1;
-        this.trees = { pear: 0, cherry: 0, peach: 0 };
-        this.fruits = { pear: 0, cherry: 0, peach: 0 };
+        this.ki = 0;
+        this.gokuEvolutions = 0;
+        this._lastGokuPhase = 'basegoku';
         browser.localStorage.removeItem("awesome_clicker_state");
     }
 }
