@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="awesome_gallery.GalleryRenderer">
+        <div class="o_gallery_renderer d-flex flex-wrap gap-3 p-3">
+            <t t-foreach="props.records" t-as="record" t-key="record.id">
+                <div class="card p-3 border">
+                    <div>ID: <t t-esc="record.id"/></div>
+                    <div>Tamaño: <t t-esc="record[props.imageField]"/></div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
