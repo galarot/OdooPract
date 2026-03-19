@@ -8,7 +8,7 @@ import { GalleryRenderer } from "./gallery_renderer";
 export const galleryView = {
     type: "gallery",
     display_name: "Gallery",
-    icon: "oi oi-view-grid",
+    icon: "fa fa-picture-o",
     multiRecord: true,
     Controller: GalleryController,
     ArchParser: GalleryArchParser,
@@ -21,9 +21,12 @@ export const galleryView = {
         const archInfo = parser.parse(arch);
         return {
             ...genericProps,
-            imageField: archInfo.imageField,
             Model: view.Model,
             Renderer: view.Renderer,
+            imageField: archInfo.imageField,
+            tooltipField: archInfo.tooltipField,
+            fieldNames: archInfo.fieldNames || [],
+            tooltipTemplate: archInfo.tooltipTemplate,
         };
     },
 };

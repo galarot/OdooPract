@@ -2,11 +2,14 @@
 <templates xml:space="preserve">
     <t t-name="awesome_gallery.GalleryController">
         <Layout display="props.display">
-            <t t-component="props.Renderer" 
-                records="model.records" 
-                imageField="props.imageField" 
-                model="props.resModel" 
-                />
+            <t t-component="props.Renderer"
+               records="model.records"
+               imageField="props.imageField"
+               tooltipField="props.tooltipField"
+               tooltipTemplate="props.tooltipTemplate"
+               model="props.resModel"
+               onImageUploaded.bind="onImageUploaded"
+            />
         </Layout>
     </t>
 </templates>

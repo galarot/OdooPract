@@ -4,11 +4,28 @@
         <field name="name">res.partner.gallery</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
-            <gallery image_field="image_1920"/>
+            <gallery image_field="image_1920" tooltip_field="name">
+                <field name="email"/>
+                <field name="name"/>
+                <tooltip-template>
+                    <p class="m-0">name: <field name="name"/></p>
+                    <p class="m-0">e-mail: <field name="email"/></p>
+                </tooltip-template>
+            </gallery>
         </field>
     </record>
 
-    <record id="contacts.action_contacts" model="ir.actions.act_window">
-        <field name="view_mode">kanban,tree,form,gallery</field>
+    <delete model="ir.actions.act_window.view" search="[('act_window_id', '=', ref('contacts.action_contacts')), ('view_mode', '=', 'gallery')]"/>
+
+    <record id="action_contacts_view_gallery" model="ir.actions.act_window.view">
+        <field name="sequence" eval="10"/>
+        <field name="view_mode">gallery</field>
+        <field name="view_id" ref="view_res_partner_gallery"/>
+        <field name="act_window_id" ref="contacts.action_contacts"/>
     </record>
+
+    <function model="ir.actions.act_window" name="write">
+        <value eval="[ref('contacts.action_contacts')]"/>
+        <value eval="{'view_mode': 'kanban,tree,form,activity,gallery'}"/>
+    </function>
 </odoo>

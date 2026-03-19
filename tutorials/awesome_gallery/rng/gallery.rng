@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+    <start>
+        <element name="gallery">
+            <attribute name="image_field"/>
+            <optional>
+                <attribute name="tooltip_field"/>
+            </optional>
+            <zeroOrMore>
+                <element name="field">
+                    <attribute name="name"/>
+                </element>
+            </zeroOrMore>
+            <optional>
+                <ref name="tooltip-template"/>
+            </optional>
+        </element>
+    </start>
+
+    <define name="tooltip-template">
+        <element name="tooltip-template">
+            <zeroOrMore>
+                <choice>
+                    <text/>
+                    <ref name="any"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="any">
+        <element>
+            <anyName/>
+            <zeroOrMore>
+                <choice>
+                    <attribute><anyName/></attribute>
+                    <text/>
+                    <ref name="any"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+</grammar>

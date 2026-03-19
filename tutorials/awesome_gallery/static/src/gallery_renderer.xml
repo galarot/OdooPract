@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="awesome_gallery.GalleryRenderer">
-        <div class="o_gallery_renderer d-flex flex-wrap gap-3 p-3">
+        <div class="o_gallery_renderer d-flex flex-wrap gap-3 p-3 bg-light">
             <t t-foreach="props.records" t-as="record" t-key="record.id">
-                <div class="card p-3 border">
-                    <div>ID: <t t-esc="record.id"/></div>
-                    <div>Tamaño: <t t-esc="record[props.imageField]"/></div>
+                <div class="card shadow-sm border-0"
+                     style="width: 150px; cursor: pointer;"
+                     t-att-data-tooltip="getTooltipText(record)"
+                     t-att-data-tooltip-template="props.tooltipTemplate or ''"
+                     t-att-data-tooltip-info="getTooltipInfo(record)">
+
+                    <div class="position-relative" t-on-click="() => this.onRecordClick(record.id)">
+                        <img class="card-img-top object-fit-cover"
+                             t-att-src="getImageUrl(record)"
+                             style="height: 150px;"/>
+                        <div class="position-absolute bottom-0 end-0 p-1" t-on-click.stop="">
+                            <FileUploader onUploaded="(info) => this.onImageUploaded(record, info)"
+                                          acceptedFileExtensions="'.jpg,.jpeg,.png,.gif,.webp'">
+                                <t t-set-slot="toggler">
+                                    <button class="btn btn-sm btn-light opacity-75">
+                                        <i class="fa fa-upload"/>
+                                    </button>
+                                </t>
+                            </FileUploader>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-2 text-center text-truncate">
+                        <small class="fw-bold"><t t-esc="record.display_name"/></small>
+                    </div>
                 </div>
             </t>
         </div>
