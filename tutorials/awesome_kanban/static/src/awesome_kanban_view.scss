@@ -1,0 +1,14 @@
+.o_awesome_kanban_view {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+    .o_customer_list {
+        flex: 0 0 200px;
+        overflow-y: auto;
+    }
+    .o_kanban_renderer {
+        flex: 1;
+        overflow-y: auto;
+    }
+}

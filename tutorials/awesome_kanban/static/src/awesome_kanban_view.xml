@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="awesome_kanban.AwesomeKanbanController" t-inherit="web.KanbanView" t-inherit-mode="primary">
+        <xpath expr="//Layout" position="attributes">
+            <attribute name="className">(model.useSampleModel ? 'o_view_sample_data' : '') + ' o_awesome_kanban_view'</attribute>
+        </xpath>
+        <xpath expr="//t[@t-component='props.Renderer']" position="before">
+            <CustomerList selectCustomer="(id, name) => this.selectCustomer(id, name)"/>
+        </xpath>
+    </t>
+
+    <t t-name="awesome_kanban.CustomerList">
+        <div class="o_customer_list bg-view border-end p-3 d-flex flex-column" style="width: 250px;">
+            <h5 class="fw-bold border-bottom pb-2">Customers</h5>
+            
+            <div class="d-flex justify-content-center border-bottom pb-2 mb-2">
+                <Pager offset="state.offset" limit="state.limit" total="state.count" onUpdate="(newState) => this.onUpdatePager(newState)"/>
+            </div>
+
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" placeholder="Search..." t-model="state.searchString"/>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="activeCustomers" 
+                    t-model="state.displayActiveCustomers"
+                    t-on-change="onChangeActiveCustomers"/>
+                <label class="form-check-label" for="activeCustomers">Active customers</label>
+            </div>
+
+            <div class="flex-grow-1 overflow-auto">
+                <div t-foreach="displayedCustomers" t-as="customer" t-key="customer.id" 
+                    class="p-2 border-bottom cursor-pointer text-truncate"
+                    t-on-click="() => props.selectCustomer(customer.id, customer.display_name)">
+                    <t t-esc="customer.display_name"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
