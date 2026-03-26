@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ryc_course_group_tree" model="ir.ui.view">
+        <field name="name">ryc.course.group.tree</field>
+        <field name="model">ryc.course.group</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="course_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ryc_course_group_form" model="ir.ui.view">
+        <field name="name">ryc.course.group.form</field>
+        <field name="model">ryc.course.group</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nombre del grupo"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="course_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

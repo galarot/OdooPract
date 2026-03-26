@@ -5,12 +5,57 @@
         <field name="model">ryc.student</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="student_code"/>
                 <field name="first_name"/>
                 <field name="last_name"/>
-                <field name="student_code"/>
                 <field name="group_id"/>
                 <field name="sex"/>
+                <field name="age"/>
             </tree>
+        </field>
+    </record>
+
+    <record id="view_ryc_student_form" model="ir.ui.view">
+        <field name="name">ryc.student.form</field>
+        <field name="model">ryc.student</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="first_name" placeholder="Nombre"/>
+                            <field name="last_name" placeholder="Apellidos"/>
+                        </h1>
+                        <h2>
+                            <field name="student_code" readonly="1"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Datos personales">
+                            <field name="email"/>
+                            <field name="sex"/>
+                            <field name="birth_date"/>
+                            <field name="age" readonly="1"/>
+                        </group>
+                        <group string="Datos académicos">
+                            <field name="group_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Expedientes disciplinarios">
+                            <field name="disciplinary_ids">
+                                <tree>
+                                    <field name="date"/>
+                                    <field name="incident_type"/>
+                                    <field name="incident"/>
+                                    <field name="time_slot"/>
+                                    <field name="ryc_teacher"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
         </field>
     </record>
 </odoo>
