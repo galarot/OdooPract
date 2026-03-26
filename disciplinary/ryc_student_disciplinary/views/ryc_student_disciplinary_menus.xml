@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_ryc_student_disciplinary" model="ir.actions.act_window">
+        <field name="name">Disciplinary Records</field>
+        <field name="res_model">ryc.student.disciplinary</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_ryc_student_disciplinary_root"
+              name="Disciplinary"
+              sequence="10"/>
+
+    <menuitem id="menu_ryc_student_disciplinary_sub"
+              name="Student Records"
+              parent="menu_ryc_student_disciplinary_root"
+              action="action_ryc_student_disciplinary"
+              sequence="10"/>
+</odoo>
