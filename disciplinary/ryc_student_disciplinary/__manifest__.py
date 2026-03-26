@@ -5,7 +5,9 @@
         'base',
     ],
     'data': [
+        'data/ryc_student_sequence.xml',
         'security/ir.model.access.csv',
+        'views/ryc_student_views.xml',
         'views/ryc_student_disciplinary_menus.xml',
     ],
     'application': True,

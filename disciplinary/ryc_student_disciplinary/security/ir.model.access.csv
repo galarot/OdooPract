@@ -1,2 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_ryc_student_disciplinary,access.ryc.student.disciplinary,model_ryc_student_disciplinary,,1,1,1,1
+access_ryc_student,access.ryc.student,model_ryc_student,,1,1,1,1
+access_ryc_course_group,access.ryc.course.group,model_ryc_course_group,,1,1,1,1
+access_ryc_course,access.ryc.course,model_ryc_course,,1,1,1,1
+access_ryc_course_level,access.ryc.course.level,model_ryc_course_level,,1,1,1,1

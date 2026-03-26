@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ryc_student_tree" model="ir.ui.view">
+        <field name="name">ryc.student.tree</field>
+        <field name="model">ryc.student</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="first_name"/>
+                <field name="last_name"/>
+                <field name="student_code"/>
+                <field name="group_id"/>
+                <field name="sex"/>
+            </tree>
+        </field>
+    </record>
+</odoo>
