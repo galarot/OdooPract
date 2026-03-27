@@ -1,3 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="view_ryc_student_disciplinary_tree" model="ir.ui.view">
+        <field name="name">ryc.student.disciplinary.tree</field>
+        <field name="model">ryc.student.disciplinary</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="ryc_student"/>
+                <field name="date"/>
+                <field name="incident_type"/>
+                <field name="incident"/>
+                <field name="time_slot"/>
+                <field name="ryc_teacher"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_ryc_student_disciplinary_form" model="ir.ui.view">
+        <field name="name">ryc.student.disciplinary.form</field>
+        <field name="model">ryc.student.disciplinary</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ryc_student" placeholder="Alumno"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Incidencia">
+                            <field name="incident_type"/>
+                            <field name="incident"/>
+                            <field name="date"/>
+                            <field name="time_slot"/>
+                        </group>
+                        <group string="Detalles">
+                            <field name="ryc_teacher"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 </odoo>
