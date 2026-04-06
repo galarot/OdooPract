@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista tree de expedientes disciplinarios -->
     <record id="view_ryc_student_disciplinary_tree" model="ir.ui.view">
         <field name="name">ryc.student.disciplinary.tree</field>
         <field name="model">ryc.student.disciplinary</field>
@@ -15,6 +16,7 @@
         </field>
     </record>
 
+    <!-- Vista form de expedientes disciplinarios -->
     <record id="view_ryc_student_disciplinary_form" model="ir.ui.view">
         <field name="name">ryc.student.disciplinary.form</field>
         <field name="model">ryc.student.disciplinary</field>

@@ -9,9 +9,12 @@ class RycStudent(models.Model):
 
     first_name = fields.Char(string='Nombre', required=True)
     last_name = fields.Char(string='Apellidos', required=True)
+    full_name = fields.Char(string='Nombre completo', compute='_compute_full_name', store=True)
+    disciplinary_count = fields.Integer(string='Nº de partes', compute='_compute_disciplinary_count')
     student_code = fields.Char(string='Código de alumno', compute='_compute_student_code', store=True)
     email = fields.Char(string='Correo electrónico')
     # grupo al que pertenece el alumno
+    course_id = fields.Many2one('ryc.course', string='Curso')
     group_id = fields.Many2one('ryc.course.group', string='Grupo')
     # expedientes disciplinarios del alumno
     disciplinary_ids = fields.One2many('ryc.student.disciplinary', 'ryc_student', string='Expedientes disciplinarios')
@@ -23,6 +26,15 @@ class RycStudent(models.Model):
         ('female', 'Mujer'),
         ('other', 'Otro'),
     ], string='Sexo')
+
+    @api.depends('first_name', 'last_name')
+    def _compute_full_name(self):
+        for record in self:
+            record.full_name = f"{record.first_name or ''} {record.last_name or ''}".strip()
+
+    def _compute_disciplinary_count(self):
+        for record in self:
+            record.disciplinary_count = len(record.disciplinary_ids)
 
     @api.depends('birth_date')
     def _compute_age(self):

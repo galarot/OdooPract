@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista tree principal de estudiantes -->
     <record id="view_ryc_student_tree" model="ir.ui.view">
         <field name="name">ryc.student.tree</field>
         <field name="model">ryc.student</field>
@@ -8,6 +9,7 @@
                 <field name="student_code"/>
                 <field name="first_name"/>
                 <field name="last_name"/>
+                <field name="course_id"/>
                 <field name="group_id"/>
                 <field name="sex"/>
                 <field name="age"/>
@@ -15,6 +17,7 @@
         </field>
     </record>
 
+    <!-- Vista form principal de estudiantes -->
     <record id="view_ryc_student_form" model="ir.ui.view">
         <field name="name">ryc.student.form</field>
         <field name="model">ryc.student</field>
@@ -38,6 +41,7 @@
                             <field name="age" readonly="1"/>
                         </group>
                         <group string="Datos académicos">
+                            <field name="course_id"/>
                             <field name="group_id"/>
                         </group>
                     </group>
@@ -54,6 +58,45 @@
                             </field>
                         </page>
                     </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista tree para Partes Disciplinarios -->
+    <record id="view_ryc_student_partes_tree" model="ir.ui.view">
+        <field name="name">ryc.student.partes.tree</field>
+        <field name="model">ryc.student</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="full_name"/>
+                <field name="group_id"/>
+                <field name="disciplinary_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista form para Partes Disciplinarios -->
+    <record id="view_ryc_student_partes_form" model="ir.ui.view">
+        <field name="name">ryc.student.partes.form</field>
+        <field name="model">ryc.student</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="full_name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <field name="disciplinary_ids">
+                        <tree>
+                            <field name="date"/>
+                            <field name="incident_type"/>
+                            <field name="incident"/>
+                            <field name="time_slot"/>
+                            <field name="ryc_teacher"/>
+                        </tree>
+                    </field>
                 </sheet>
             </form>
         </field>

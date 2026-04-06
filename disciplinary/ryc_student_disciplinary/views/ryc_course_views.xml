@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista tree principal de cursos -->
     <record id="view_ryc_course_tree" model="ir.ui.view">
         <field name="name">ryc.course.tree</field>
         <field name="model">ryc.course</field>
@@ -12,6 +13,7 @@
         </field>
     </record>
 
+    <!-- Vista form principal de cursos -->
     <record id="view_ryc_course_form" model="ir.ui.view">
         <field name="name">ryc.course.form</field>
         <field name="model">ryc.course</field>
@@ -34,6 +36,41 @@
                             <field name="group_ids">
                                 <tree>
                                     <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista form para Por Cursos: muestra alumnos del curso -->
+    <record id="view_ryc_course_cursos_form" model="ir.ui.view">
+        <field name="name">ryc.course.cursos.form</field>
+        <field name="model">ryc.course</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="code" readonly="1"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <field name="level_id" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Alumnos">
+                            <field name="student_ids">
+                                <tree>
+                                    <field name="full_name"/>
+                                    <field name="group_id"/>
+                                    <field name="sex"/>
+                                    <field name="age"/>
                                 </tree>
                             </field>
                         </page>

@@ -8,6 +8,7 @@
         'data/ryc_student_sequence.xml',
         'security/ir.model.access.csv',
         'views/ryc_student_views.xml',
+        'views/ryc_student_disciplinary_views.xml',
         'views/ryc_course_level_views.xml',
         'views/ryc_course_group_views.xml',
         'views/ryc_course_views.xml',

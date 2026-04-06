@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="action_ryc_student_disciplinary" model="ir.actions.act_window">
-        <field name="name">Disciplinary Records</field>
+        <field name="name">Estudiantes</field>
         <field name="res_model">ryc.student</field>
         <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_student_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_student_form')}),
+        ]"/>
+    </record>
+
+    <record id="action_ryc_partes_disciplinarios" model="ir.actions.act_window">
+        <field name="name">Partes Disciplinarios</field>
+        <field name="res_model">ryc.student</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('disciplinary_ids', '!=', False)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_student_partes_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_student_partes_form')}),
+        ]"/>
+    </record>
+
+    <record id="action_ryc_cursos" model="ir.actions.act_window">
+        <field name="name">Por Cursos</field>
+        <field name="res_model">ryc.course</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_course_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_course_cursos_form')}),
+        ]"/>
+    </record>
+
+    <record id="action_ryc_grupos" model="ir.actions.act_window">
+        <field name="name">Grupos</field>
+        <field name="res_model">ryc.course.group</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_course_group_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_course_group_form')}),
+        ]"/>
+    </record>
+
+    <record id="action_ryc_niveles" model="ir.actions.act_window">
+        <field name="name">Niveles</field>
+        <field name="res_model">ryc.course.level</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_course_level_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_course_level_form')}),
+        ]"/>
     </record>
 
     <menuitem id="menu_ryc_student_disciplinary_root"
-              name="Disciplinary"
+              name="Estudiantes"
               sequence="10"/>
 
     <menuitem id="menu_ryc_student_disciplinary_sub"
@@ -15,4 +60,28 @@
               parent="menu_ryc_student_disciplinary_root"
               action="action_ryc_student_disciplinary"
               sequence="10"/>
+
+    <menuitem id="menu_ryc_partes_disciplinarios"
+              name="Partes Disciplinarios"
+              parent="menu_ryc_student_disciplinary_root"
+              action="action_ryc_partes_disciplinarios"
+              sequence="20"/>
+
+    <menuitem id="menu_ryc_cursos"
+              name="Cursos"
+              parent="menu_ryc_student_disciplinary_root"
+              action="action_ryc_cursos"
+              sequence="30"/>
+
+    <menuitem id="menu_ryc_grupos"
+              name="Grupos"
+              parent="menu_ryc_student_disciplinary_root"
+              action="action_ryc_grupos"
+              sequence="40"/>
+
+    <menuitem id="menu_ryc_niveles"
+              name="Niveles"
+              parent="menu_ryc_student_disciplinary_root"
+              action="action_ryc_niveles"
+              sequence="50"/>
 </odoo>
