@@ -10,6 +10,6 @@ class RycCourse(models.Model):
     #nivel educativo al que pertenece
     level_id = fields.Many2one('ryc.course.level', string='Nivel')
     #grupos que tiene
-    group_ids = fields.One2many('ryc.course.group', 'course_id', string='Grupos')
+    group_ids = fields.Many2many('ryc.course.group', string='Grupos')
     # alumnos matriculados en este curso
     student_ids = fields.One2many('ryc.student', 'course_id', string='Alumnos')

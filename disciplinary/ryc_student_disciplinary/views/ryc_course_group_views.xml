@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="course_id"/>
+                <field name="course_ids" widget="many2many_tags"/>
             </tree>
         </field>
     </record>
@@ -23,7 +23,7 @@
                         </h1>
                     </div>
                     <group>
-                        <field name="course_id"/>
+                        <field name="course_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
             </form>

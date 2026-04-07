@@ -27,7 +27,7 @@
         <field name="view_mode">tree,form</field>
         <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_course_tree')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_course_cursos_form')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_course_form')}),
         ]"/>
     </record>
 

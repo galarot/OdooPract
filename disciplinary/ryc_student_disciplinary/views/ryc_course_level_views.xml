@@ -28,6 +28,13 @@
                                     <field name="name"/>
                                     <field name="code"/>
                                 </tree>
+                                <form>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="level_id"/>
+                                    </group>
+                                </form>
                             </field>
                         </page>
                     </notebook>

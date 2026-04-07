@@ -6,5 +6,5 @@ class RycCourseGroup(models.Model):
     _description = 'Course Group'
 
     name = fields.Char(string='Nombre', required=True)
-    # curso al que pertenece
-    course_id = fields.Many2one('ryc.course', string='Curso')
+    # cursos a los que pertenece este grupo
+    course_ids = fields.Many2many('ryc.course', string='Cursos')

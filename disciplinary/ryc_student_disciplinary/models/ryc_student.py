@@ -13,6 +13,7 @@ class RycStudent(models.Model):
     disciplinary_count = fields.Integer(string='Nº de partes', compute='_compute_disciplinary_count')
     student_code = fields.Char(string='Código de alumno', compute='_compute_student_code', store=True)
     email = fields.Char(string='Correo electrónico')
+    image = fields.Image(string='Foto')
     # grupo al que pertenece el alumno
     course_id = fields.Many2one('ryc.course', string='Curso')
     group_id = fields.Many2one('ryc.course.group', string='Grupo')
