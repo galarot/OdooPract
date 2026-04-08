@@ -51,6 +51,8 @@ class RycStudent(models.Model):
     @api.depends('first_name', 'last_name', 'birth_date')
     def _compute_student_code(self):
         for record in self:
+            if record.student_code:
+                continue
             if record.first_name and record.last_name and record.birth_date:
                 year = str(date.today().year)
                 surnames = record.last_name.strip().split()

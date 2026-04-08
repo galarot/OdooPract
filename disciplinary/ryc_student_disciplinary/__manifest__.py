@@ -7,6 +7,7 @@
     ],
     'data': [
         'data/ryc_student_sequence.xml',
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/ryc_student_views.xml',
         'views/ryc_student_disciplinary_views.xml',

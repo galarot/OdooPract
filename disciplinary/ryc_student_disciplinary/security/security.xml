@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_disciplinary" model="ir.module.category">
+        <field name="name">Disciplinary</field>
+    </record>
+
+    <record id="group_disciplinary_admin" model="res.groups">
+        <field name="name">Administrador</field>
+        <field name="category_id" ref="module_category_disciplinary"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_disciplinary_directivo" model="res.groups">
+        <field name="name">Equipo directivo</field>
+        <field name="category_id" ref="module_category_disciplinary"/>
+    </record>
+</odoo>

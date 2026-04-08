@@ -1,6 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_ryc_student_disciplinary,access.ryc.student.disciplinary,model_ryc_student_disciplinary,,1,1,1,1
-access_ryc_student,access.ryc.student,model_ryc_student,,1,1,1,1
-access_ryc_course_group,access.ryc.course.group,model_ryc_course_group,,1,1,1,1
-access_ryc_course,access.ryc.course,model_ryc_course,,1,1,1,1
-access_ryc_course_level,access.ryc.course.level,model_ryc_course_level,,1,1,1,1
+access_ryc_student_disciplinary_admin,access.ryc.student.disciplinary.admin,model_ryc_student_disciplinary,ryc_student_disciplinary.group_disciplinary_admin,1,1,1,1
+access_ryc_student_admin,access.ryc.student.admin,model_ryc_student,ryc_student_disciplinary.group_disciplinary_admin,1,1,1,1
+access_ryc_course_group_admin,access.ryc.course.group.admin,model_ryc_course_group,ryc_student_disciplinary.group_disciplinary_admin,1,1,1,1
+access_ryc_course_admin,access.ryc.course.admin,model_ryc_course,ryc_student_disciplinary.group_disciplinary_admin,1,1,1,1
+access_ryc_course_level_admin,access.ryc.course.level.admin,model_ryc_course_level,ryc_student_disciplinary.group_disciplinary_admin,1,1,1,1
+access_ryc_student_disciplinary_directivo,access.ryc.student.disciplinary.directivo,model_ryc_student_disciplinary,ryc_student_disciplinary.group_disciplinary_directivo,1,1,1,1
+access_ryc_student_directivo,access.ryc.student.directivo,model_ryc_student,ryc_student_disciplinary.group_disciplinary_directivo,1,1,1,1
+access_ryc_course_group_directivo,access.ryc.course.group.directivo,model_ryc_course_group,ryc_student_disciplinary.group_disciplinary_directivo,1,1,1,1
+access_ryc_course_directivo,access.ryc.course.directivo,model_ryc_course,ryc_student_disciplinary.group_disciplinary_directivo,1,1,1,1
+access_ryc_course_level_directivo,access.ryc.course.level.directivo,model_ryc_course_level,ryc_student_disciplinary.group_disciplinary_directivo,1,1,1,1
