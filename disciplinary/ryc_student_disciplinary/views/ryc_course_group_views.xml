@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="code"/>
                 <field name="course_ids" widget="many2many_tags"/>
             </tree>
         </field>
@@ -21,9 +22,13 @@
                         <h1>
                             <field name="name" placeholder="Nombre del grupo"/>
                         </h1>
+                        <h2>
+                            <field name="code" placeholder="Código"/>
+                        </h2>
                     </div>
                     <group>
                         <field name="course_ids" widget="many2many_tags"/>
+                        <field name="tutor_id"/>
                     </group>
                 </sheet>
             </form>

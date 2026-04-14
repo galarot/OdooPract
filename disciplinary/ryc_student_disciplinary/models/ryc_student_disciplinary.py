@@ -42,4 +42,4 @@ class RycStudentDisciplinary(models.Model):
         ('20:30-21:30', '20:30 - 21:30 | Sexta hora de la tarde'),
     ], string='Franja horaria')
     # Profesor que registra la incidencia (viene de res.partner)
-    ryc_teacher = fields.Many2one('res.partner', string='Profesor')
+    ryc_teacher = fields.Many2one('res.partner', string='Profesor', default=lambda self: self.env.user.partner_id)
