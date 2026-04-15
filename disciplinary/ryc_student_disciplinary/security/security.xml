@@ -20,33 +20,9 @@
         <field name="category_id" ref="module_category_disciplinary"/>
     </record>
 
-    <!-- Regla: profesor puede leer todos los expedientes -->
-    <record id="rule_disciplinary_profesor_read" model="ir.rule">
-        <field name="name">Profesor: puede leer todos los expedientes</field>
-        <field name="model_id" ref="model_ryc_student_disciplinary"/>
-        <field name="groups" eval="[(4, ref('group_disciplinary_profesor'))]"/>
-        <field name="domain_force">[(1, '=', 1)]</field>
-        <field name="perm_read">1</field>
-        <field name="perm_write">0</field>
-        <field name="perm_create">0</field>
-        <field name="perm_unlink">0</field>
-    </record>
-
-    <!-- Regla: profesor solo puede escribir/borrar/crear expedientes propios -->
-    <record id="rule_disciplinary_profesor_own" model="ir.rule">
-        <field name="name">Profesor: solo gestiona sus propios expedientes</field>
-        <field name="model_id" ref="model_ryc_student_disciplinary"/>
-        <field name="groups" eval="[(4, ref('group_disciplinary_profesor'))]"/>
-        <field name="domain_force">[('create_uid', '=', user.id)]</field>
-        <field name="perm_read">0</field>
-        <field name="perm_write">1</field>
-        <field name="perm_create">1</field>
-        <field name="perm_unlink">1</field>
-    </record>
-
-    <!-- Regla: profesor puede leer todos los alumnos -->
+    <!-- ryc.student: puede leer todos, solo escribe/crea/borra alumnos de su grupo tutelado -->
     <record id="rule_student_profesor_read" model="ir.rule">
-        <field name="name">Profesor: puede leer todos los alumnos</field>
+        <field name="name">Profesor: lee todos los alumnos</field>
         <field name="model_id" ref="model_ryc_student"/>
         <field name="groups" eval="[(4, ref('group_disciplinary_profesor'))]"/>
         <field name="domain_force">[(1, '=', 1)]</field>
@@ -56,9 +32,8 @@
         <field name="perm_unlink">0</field>
     </record>
 
-    <!-- Regla: profesor solo puede escribir alumnos de su grupo tutelado -->
-    <record id="rule_student_profesor_own" model="ir.rule">
-        <field name="name">Profesor: solo escribe alumnos de su tutoría</field>
+    <record id="rule_student_profesor_write" model="ir.rule">
+        <field name="name">Profesor: solo edita alumnos de su grupo tutelado</field>
         <field name="model_id" ref="model_ryc_student"/>
         <field name="groups" eval="[(4, ref('group_disciplinary_profesor'))]"/>
         <field name="domain_force">[('group_id.tutor_id.user_id', '=', user.id)]</field>
@@ -66,5 +41,28 @@
         <field name="perm_write">1</field>
         <field name="perm_create">0</field>
         <field name="perm_unlink">0</field>
+    </record>
+
+    <!-- ryc.student.disciplinary: lee todos, solo escribe/crea/borra expedientes de alumnos de su grupo tutelado -->
+    <record id="rule_disciplinary_profesor_read" model="ir.rule">
+        <field name="name">Profesor: lee todos los expedientes</field>
+        <field name="model_id" ref="model_ryc_student_disciplinary"/>
+        <field name="groups" eval="[(4, ref('group_disciplinary_profesor'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read">1</field>
+        <field name="perm_write">0</field>
+        <field name="perm_create">0</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+    <record id="rule_disciplinary_profesor_write" model="ir.rule">
+        <field name="name">Profesor: solo gestiona expedientes de alumnos de su grupo tutelado</field>
+        <field name="model_id" ref="model_ryc_student_disciplinary"/>
+        <field name="groups" eval="[(4, ref('group_disciplinary_profesor'))]"/>
+        <field name="domain_force">[('ryc_student.group_id.tutor_id.user_id', '=', user.id)]</field>
+        <field name="perm_read">0</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
     </record>
 </odoo>

@@ -9,7 +9,7 @@
                 <page string="Tutoría">
                     <group>
                         <field name="is_tutor"/>
-                        <field name="course_tutor" invisible="not is_tutor"/>
+                        <field name="course_tutor" string="Grupo tutor" invisible="not is_tutor"/>
                     </group>
                 </page>
             </notebook>
