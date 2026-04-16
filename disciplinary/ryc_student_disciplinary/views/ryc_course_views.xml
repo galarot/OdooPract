@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista search de cursos -->
+    <record id="view_ryc_course_search" model="ir.ui.view">
+        <field name="name">ryc.course.search</field>
+        <field name="model">ryc.course</field>
+        <field name="arch" type="xml">
+            <search string="Cursos">
+                <field name="code" string="Código"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Etapa" name="group_by_level" context="{'group_by': 'level_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Vista tree principal de cursos -->
     <record id="view_ryc_course_tree" model="ir.ui.view">
         <field name="name">ryc.course.tree</field>

@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista search de estudiantes -->
+    <record id="view_ryc_student_search" model="ir.ui.view">
+        <field name="name">ryc.student.search</field>
+        <field name="model">ryc.student</field>
+        <field name="arch" type="xml">
+            <search string="Estudiantes">
+                <field name="course_id" string="Curso"/>
+                <field name="group_id" string="Grupo"/>
+                <field name="sex" string="Sexo"/>
+                <field name="full_name" string="Nombre completo"/>
+                <field name="last_name" string="Apellidos"/>
+                <field name="email" string="Correo electrónico"/>
+                <separator/>
+                <filter string="Mayores de edad" name="adults" domain="[('age', '&gt;=', 18)]"/>
+                <filter string="Menores de edad" name="minors" domain="[('age', '&lt;', 18)]"/>
+                <filter string="Con partes de incidencia" name="with_incidents" domain="[('disciplinary_ids', '!=', False)]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Grupo" name="group_by_group" context="{'group_by': 'group_id'}"/>
+                    <filter string="Curso" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Vista tree principal de estudiantes -->
     <record id="view_ryc_student_tree" model="ir.ui.view">
         <field name="name">ryc.student.tree</field>
