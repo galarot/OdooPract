@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_students_by_group" model="ir.actions.report">
+        <field name="name">Alumnos por grupo</field>
+        <field name="model">ryc.student</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_students_by_group</field>
+        <field name="report_file">ryc_student_disciplinary.report_students_by_group</field>
+        <field name="binding_model_id" ref="model_ryc_student"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_students_by_course" model="ir.actions.report">
+        <field name="name">Alumnos por curso</field>
+        <field name="model">ryc.student</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_students_by_course</field>
+        <field name="report_file">ryc_student_disciplinary.report_students_by_course</field>
+        <field name="binding_model_id" ref="model_ryc_student"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_students_list" model="ir.actions.report">
+        <field name="name">Listado de alumnos</field>
+        <field name="model">ryc.student</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_students_list</field>
+        <field name="report_file">ryc_student_disciplinary.report_students_list</field>
+        <field name="binding_model_id" ref="model_ryc_student"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_courses_list" model="ir.actions.report">
+        <field name="name">Listado de cursos</field>
+        <field name="model">ryc.course</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_courses_list</field>
+        <field name="report_file">ryc_student_disciplinary.report_courses_list</field>
+        <field name="binding_model_id" ref="model_ryc_course"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_groups_list" model="ir.actions.report">
+        <field name="name">Listado de grupos</field>
+        <field name="model">ryc.course.group</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_groups_list</field>
+        <field name="report_file">ryc_student_disciplinary.report_groups_list</field>
+        <field name="binding_model_id" ref="model_ryc_course_group"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="report_style">
+        <style>
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                page-break-inside: avoid !important;
+                margin-bottom: 16px;
+            }
+            .table th, .table td {
+                border: 1px solid #ddd;
+                text-align: center;
+                padding: 8px;
+            }
+            .table tr:nth-child(even) { background-color: #f9f9f9; }
+            .table tr:hover { background-color: #f1f1f1; }
+            .table th {
+                background-color: #002169;
+                color: white;
+                font-weight: bold;
+            }
+            .table .title {
+                background-color: #001747;
+                color: white;
+                font-size: 20px;
+                font-weight: bold;
+                text-align: center;
+                height: 45px;
+                vertical-align: middle;
+            }
+        </style>
+    </template>
+
+
+    <template id="report_students_by_group">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <t t-set="grupos" t-value="sorted(set(doc.group_id.name for doc in docs if doc.group_id))"/>
+                <t t-foreach="grupos" t-as="grupo">
+                    <table class="table">
+                        <tr><th colspan="5" class="title"><span t-out="grupo"/></th></tr>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre completo</th>
+                            <th>Curso</th>
+                            <th>Sexo</th>
+                            <th>Edad</th>
+                        </tr>
+                        <t t-foreach="docs.filtered(lambda s: s.group_id.name == grupo).sorted('last_name')" t-as="o">
+                            <tr>
+                                <td><span t-field="o.student_code"/></td>
+                                <td><span t-field="o.full_name"/></td>
+                                <td><span t-field="o.course_id"/></td>
+                                <td><span t-field="o.sex"/></td>
+                                <td><span t-field="o.age"/></td>
+                            </tr>
+                        </t>
+                    </table>
+                    <br/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="report_students_by_course">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <t t-set="cursos" t-value="sorted(set(doc.course_id.name for doc in docs if doc.course_id))"/>
+                <t t-foreach="cursos" t-as="curso">
+                    <table class="table">
+                        <tr><th colspan="5" class="title"><span t-out="curso"/></th></tr>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre completo</th>
+                            <th>Grupo</th>
+                            <th>Sexo</th>
+                            <th>Edad</th>
+                        </tr>
+                        <t t-foreach="docs.filtered(lambda s: s.course_id.name == curso).sorted('last_name')" t-as="o">
+                            <tr>
+                                <td><span t-field="o.student_code"/></td>
+                                <td><span t-field="o.full_name"/></td>
+                                <td><span t-field="o.group_id"/></td>
+                                <td><span t-field="o.sex"/></td>
+                                <td><span t-field="o.age"/></td>
+                            </tr>
+                        </t>
+                    </table>
+                    <br/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="report_students_list">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <table class="table">
+                    <tr><th colspan="3" class="title">Listado de alumnos</th></tr>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre completo</th>
+                        <th>Correo electrónico</th>
+                    </tr>
+                    <t t-foreach="docs.sorted('last_name')" t-as="o">
+                        <tr>
+                            <td><span t-field="o.student_code"/></td>
+                            <td><span t-field="o.full_name"/></td>
+                            <td><span t-field="o.email"/></td>
+                        </tr>
+                    </t>
+                </table>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="report_courses_list">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <table class="table">
+                    <tr><th colspan="4" class="title">Listado de cursos</th></tr>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Grupos</th>
+                        <th>Etapa</th>
+                    </tr>
+                    <t t-foreach="docs.sorted('name')" t-as="o">
+                        <tr>
+                            <td><span t-field="o.code"/></td>
+                            <td><span t-field="o.name"/></td>
+                            <td><span t-out="', '.join(o.group_ids.mapped('name'))"/></td>
+                            <td><span t-field="o.level_id"/></td>
+                        </tr>
+                    </t>
+                </table>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="report_groups_list">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <table class="table">
+                    <tr><th colspan="3" class="title">Listado de grupos</th></tr>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Tutor</th>
+                    </tr>
+                    <t t-foreach="docs.sorted('name')" t-as="o">
+                        <tr>
+                            <td><span t-field="o.code"/></td>
+                            <td><span t-field="o.name"/></td>
+                            <td><span t-field="o.tutor_id"/></td>
+                        </tr>
+                    </t>
+                </table>
+            </div>
+        </t>
+    </template>
+
+</odoo>

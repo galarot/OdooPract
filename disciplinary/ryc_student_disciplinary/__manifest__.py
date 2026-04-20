@@ -16,6 +16,8 @@
         'views/ryc_course_views.xml',
         'views/hr_employee_views.xml',
         'views/ryc_student_disciplinary_menus.xml',
+        'reports/ryc_student_reports.xml',
+        'reports/ryc_disciplinary_reports.xml',
     ],
     'application': True,
     'installable': True,

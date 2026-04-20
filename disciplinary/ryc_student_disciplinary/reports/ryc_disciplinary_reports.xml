@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===================== ACCIONES DE INFORME ===================== -->
+
+    <record id="action_report_disciplinary_by_type" model="ir.actions.report">
+        <field name="name">Partes por tipo de incidencia</field>
+        <field name="model">ryc.student.disciplinary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_disciplinary_by_type</field>
+        <field name="report_file">ryc_student_disciplinary.report_disciplinary_by_type</field>
+        <field name="binding_model_id" ref="model_ryc_student_disciplinary"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_disciplinary_by_student" model="ir.actions.report">
+        <field name="name">Partes por alumno</field>
+        <field name="model">ryc.student.disciplinary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ryc_student_disciplinary.report_disciplinary_by_student</field>
+        <field name="report_file">ryc_student_disciplinary.report_disciplinary_by_student</field>
+        <field name="binding_model_id" ref="model_ryc_student_disciplinary"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ===================== PARTES POR TIPO DE INCIDENCIA ===================== -->
+
+    <template id="report_disciplinary_by_type">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <t t-set="tipos" t-value="[
+                    ('discipline_report', 'Parte de disciplina'),
+                    ('minor_offense',     'Falta leve'),
+                    ('warning',           'Amonestación'),
+                ]"/>
+                <t t-foreach="tipos" t-as="tipo">
+                    <t t-set="partes" t-value="docs.filtered(lambda d: d.incident_type == tipo[0])"/>
+                    <t t-if="partes">
+                        <table class="table">
+                            <tr><th colspan="5" class="title"><span t-out="tipo[1]"/></th></tr>
+                            <tr>
+                                <th>Alumno</th>
+                                <th>Fecha</th>
+                                <th>Conducta</th>
+                                <th>Franja horaria</th>
+                                <th>Profesor</th>
+                            </tr>
+                            <t t-foreach="partes.sorted('date')" t-as="o">
+                                <tr>
+                                    <td><span t-field="o.ryc_student"/></td>
+                                    <td><span t-field="o.date"/></td>
+                                    <td><span t-field="o.incident"/></td>
+                                    <td><span t-field="o.time_slot"/></td>
+                                    <td><span t-field="o.ryc_teacher"/></td>
+                                </tr>
+                            </t>
+                        </table>
+                        <br/>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- ===================== PARTES POR ALUMNO ===================== -->
+
+    <template id="report_disciplinary_by_student">
+        <t t-call="web.html_container">
+            <t t-call="ryc_student_disciplinary.report_style"/>
+            <div class="page">
+                <t t-set="alumnos" t-value="docs.mapped('ryc_student')"/>
+                <t t-foreach="alumnos" t-as="alumno">
+                    <t t-set="partes" t-value="docs.filtered(lambda d: d.ryc_student == alumno).sorted('date')"/>
+                    <table class="table">
+                        <tr><th colspan="5" class="title"><span t-field="alumno.full_name"/></th></tr>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Conducta</th>
+                            <th>Franja horaria</th>
+                            <th>Profesor</th>
+                        </tr>
+                        <t t-foreach="partes" t-as="o">
+                            <tr>
+                                <td><span t-field="o.date"/></td>
+                                <td><span t-field="o.incident_type"/></td>
+                                <td><span t-field="o.incident"/></td>
+                                <td><span t-field="o.time_slot"/></td>
+                                <td><span t-field="o.ryc_teacher"/></td>
+                            </tr>
+                        </t>
+                    </table>
+                    <br/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>
