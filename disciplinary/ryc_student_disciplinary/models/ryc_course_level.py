@@ -8,3 +8,7 @@ class RycCourseLevel(models.Model):
     name = fields.Char(string='Nombre', required=True)
     # cursos que pertenecen
     course_ids = fields.One2many('ryc.course', 'level_id', string='Cursos')
+
+    _sql_constraints = [
+        ('name_unique', 'UNIQUE(name)', 'Ya existe un nivel con ese nombre.'),
+    ]

@@ -13,3 +13,7 @@ class RycCourse(models.Model):
     group_ids = fields.Many2many('ryc.course.group', string='Grupos')
     # alumnos matriculados en este curso
     student_ids = fields.One2many('ryc.student', 'course_id', string='Alumnos')
+
+    _sql_constraints = [
+        ('name_unique', 'UNIQUE(name)', 'Ya existe un curso con ese nombre.'),
+    ]

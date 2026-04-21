@@ -7,11 +7,8 @@
             <search string="Grupos">
                 <field name="code" string="Código"/>
                 <separator/>
-                <filter string="Menos de 10 alumnos" name="less_10" domain="[('student_count', '&lt;', 10)]"/>
-                <filter string="Más de 28 alumnos" name="more_28" domain="[('student_count', '&gt;', 28)]"/>
-                <separator/>
                 <group expand="0" string="Agrupar por">
-                    <filter string="Etapa" name="group_by_level" context="{'group_by': 'course_ids'}"/>
+                    <filter string="Curso" name="group_by_course" context="{'group_by': 'course_ids'}"/>
                 </group>
             </search>
         </field>

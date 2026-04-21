@@ -18,3 +18,7 @@ class RycCourseGroup(models.Model):
     def _compute_student_count(self):
         for record in self:
             record.student_count = len(record.student_ids)
+
+    _sql_constraints = [
+        ('name_unique', 'UNIQUE(name)', 'Ya existe un grupo con ese nombre.'),
+    ]
