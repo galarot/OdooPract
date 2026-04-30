@@ -4,6 +4,7 @@
     'depends': [
         'base',
         'hr',
+        'mail',
     ],
     'data': [
         'data/ryc_student_sequence.xml',
