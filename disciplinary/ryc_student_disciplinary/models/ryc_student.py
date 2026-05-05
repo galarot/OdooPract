@@ -6,27 +6,28 @@ class RycStudent(models.Model):
     _name = 'ryc.student'
     _description = 'Student'
     _rec_name = 'first_name'
+    _inherit = ['mail.thread.cc', 'mail.activity.mixin']
 
-    first_name = fields.Char(string='Nombre', required=True)
-    last_name = fields.Char(string='Apellidos', required=True)
+    first_name = fields.Char(string='Nombre', required=True, tracking=True)
+    last_name = fields.Char(string='Apellidos', required=True, tracking=True)
     full_name = fields.Char(string='Nombre completo', compute='_compute_full_name', store=True)
     disciplinary_count = fields.Integer(string='Nº de partes', compute='_compute_disciplinary_count')
     student_code = fields.Char(string='Código de alumno', compute='_compute_student_code', store=True)
-    email = fields.Char(string='Correo electrónico')
+    email = fields.Char(string='Correo electrónico', tracking=True)
     image = fields.Image(string='Foto')
     # grupo al que pertenece el alumno
-    course_id = fields.Many2one('ryc.course', string='Curso')
-    group_id = fields.Many2one('ryc.course.group', string='Grupo')
+    course_id = fields.Many2one('ryc.course', string='Curso', tracking=True)
+    group_id = fields.Many2one('ryc.course.group', string='Grupo', tracking=True)
     # expedientes disciplinarios del alumno
     disciplinary_ids = fields.One2many('ryc.student.disciplinary', 'ryc_student', string='Expedientes disciplinarios')
 
-    birth_date = fields.Date(string='Fecha de nacimiento')
+    birth_date = fields.Date(string='Fecha de nacimiento', tracking=True)
     age = fields.Integer(string='Edad', compute='_compute_age', store=True)
     sex = fields.Selection([
         ('male', 'Hombre'),
         ('female', 'Mujer'),
         ('other', 'Otro'),
-    ], string='Sexo')
+    ], string='Sexo', tracking=True)
 
     @api.depends('first_name', 'last_name')
     def _compute_full_name(self):
