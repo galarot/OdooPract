@@ -23,3 +23,18 @@ class RycCourseGroup(models.Model):
     _sql_constraints = [
         ('name_unique', 'UNIQUE(name)', 'Ya existe un grupo con ese nombre.'),
     ]
+
+    def write(self, vals):
+        if 'course_ids' in vals:
+            for record in self:
+                old = record.course_ids.mapped('name')
+                res = super().write(vals)
+                new = record.course_ids.mapped('name')
+                added = set(new) - set(old)
+                removed = set(old) - set(new)
+                if added:
+                    record.message_post(body=f"Cursos añadidos: {', '.join(sorted(added))}")
+                if removed:
+                    record.message_post(body=f"Cursos eliminados: {', '.join(sorted(removed))}")
+                return res
+        return super().write(vals)

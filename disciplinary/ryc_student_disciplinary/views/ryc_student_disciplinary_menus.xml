@@ -13,12 +13,11 @@
 
     <record id="action_ryc_partes_disciplinarios" model="ir.actions.act_window">
         <field name="name">Partes Disciplinarios</field>
-        <field name="res_model">ryc.student</field>
+        <field name="res_model">ryc.student.disciplinary</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('disciplinary_ids', '!=', False)]</field>
         <field name="view_ids" eval="[(5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_student_partes_tree')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_student_partes_form')}),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ryc_student_disciplinary_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_ryc_student_disciplinary_form')}),
         ]"/>
     </record>
 
