@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Formulario principal -->
+    <template id="form" name="Disciplinary Form" inherit_id="web.frontend_layout">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h3>Registrar Parte Disciplinario</h3>
+                            </div>
+                            <div class="card-body" id="form-container"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Error de autorización -->
+    <template id="unauthorized" name="Unauthorized" inherit_id="web.frontend_layout">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div class="container my-5">
+                <div class="alert alert-danger">
+                    <h4>Acceso Denegado</h4>
+                    <p>Solo profesores registrados pueden acceder a esta sección.</p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
