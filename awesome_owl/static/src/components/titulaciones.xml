@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="awesome_owl.titulaciones">
+      <SelectMenu
+        choices="this.state.choices"
+        required="True"
+        value="this.state.selected"
+        onSelect="this.state.select"
+        class="this.state.area"
+        />
+      <br/>
+    </t>
+</templates>

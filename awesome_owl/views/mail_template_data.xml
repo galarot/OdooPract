@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_data_applicant_new" model="mail.template">
+            <field name="name">Reclutamiento: Nuevas solicitudes</field>
+            <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+            <field name="subject">Bolsa de profesorado TEAR S.C.A.: {{ object.job_id.name }}</field>
+            <field name="email_to" eval="False"/>
+            <field name="partner_to" eval="False"/>
+            <field name="use_default_to" eval="True"/>
+            <field name="description">Correo para nuevas solicitudes de la bolsa</field>
+            <field name="body_html" type="html">
+                <div style="font-size: 14px; margin: 0px; padding: 0px;">
+                    Hola,
+                    hemos recibido su solicitud correctamente.
+                    <br/>
+                    <br/>
+                    A continuación podrá ver un resumen de su baremo:
+                    <hr width="97%"
+                        style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block;
+                            font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
+                    <div style="text-align: center;">
+                        Nombre: <t t-out="object.partner_name or ''">Nombre Apellido Apellido</t><br/>
+                        Titulación: <t t-out="object.titulacion.name or ''">Matemáticas</t><br/>
+                        <i style="font-size: 12px;">
+                            (Aprobado en Consejo Escolar del 25-10-2025)
+                        </i>
+                    </div>
+                    <table style="width:90%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; margin: 0 auto">
+                        <tr>
+                            <td style="border:1px solid #000; font-weight:bold; padding:4px;">
+                                1.- MÉRITOS ACADÉMICOS (MAX. 2 PUNTOS)
+                            </td>
+                            <td colspan="2" style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                    <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                        <t t-out="object.total_ma"/>
+                                    </b></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                1.1.- Titulación exigida:
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.1.1.- Licenciatura o Grado de más 240 créditos
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.5 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <t t-if="object.ma_titulacion_exigida == '0.5'">
+                                    <p style="margin:auto; vertical-align:middle; text-align:center;"><b>0.5</b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.1.2.- Diplomatura o Grado de menos de 240 créditos
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.25 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center;">
+                                <t t-if="object.ma_titulacion_exigida == '0.25'">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>0.25</b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                1.2.- Expediente académico (nota media del título presentado para la plaza a desempeñar)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.2.1.- Matrícula
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.5 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_expediente_academico == '0.5'">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>0.5</b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.2.2.- Sobresaliente
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.3 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_expediente_academico == '0.3'">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>0.3</b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.2.3.- Notable
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.2 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_expediente_academico == '0.2'">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>0.2</b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                1.3.- Titulación habilitante
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                Posesión del CAP o MAES
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.posesion_cap_maes == True">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>X</b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                1.4.- Títulos diferentes al presentado para la plaza a desempeñar
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.4.1.- Doctor
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.75 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_td_doctor >= 1">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.ma_td_doctor * 0.75"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.4.2.- Suficiencia investigadora
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.5 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_td_si >= 1">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.ma_td_si * 0.5"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.4.3.- Otro Máster (excluido CAP o MAES), <br/>
+                                1.4.4.- Otra Licenciatura o Grado de más de 240 créditos
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.4 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_td_otra_lic >= 1">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.ma_td_otra_lic * 0.4"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.4.5.- Otra Diplomatura o Grado de menos de 240 créditos
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.25 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_td_otra_dip >= 1">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.ma_td_otra_dip * 0.25"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.4.6.- CFGS - FP2
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.2 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ma_td_cfgs >= 1">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.ma_td_cfgs * 0.2"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                1.5.- Títulos oficiales de idiomas
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.5.1- Inglés
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.ingles != '0'">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.ingles"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                1.5.2- Francés
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <t t-if="object.frances != '0'">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.frances"/>
+                                </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="width:90%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; margin: 0 auto">
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; font-weight:bold; padding:4px;">
+                                2.- CURSOS REALIZADOS (MÁX. 1 PUNTO)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                2.1.- Por cursos, jornadas, congresos o seminarios de formación recibidos relacionados con la docencia.<br/>
+                                Por cada 10 horas o 0.5 créditos
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.01 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <t t-if="object.cursos_realizados >= 1">
+                                    <p style="margin:auto; vertical-align:middle; text-align:center; width:64px"><b>
+                                        <t t-out="object.total_cr"/>
+                                    </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="width:90%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; margin: 0 auto">
+                        <tr>
+                            <td style="border:1px solid #000; font-weight:bold; padding:4px;">
+                                3.- EXPERIENCIA DOCENTE (MÁX. 2 PUNTOS)
+                            </td>
+                            <td colspan="2" style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.total_ed"/>
+                                </b></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                3.1.- En los centros de la cooperativa TEAR de Granada (CES S. Ramón y Cajal y CDP Santa Marta)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                3.1.1.- Por mes o fracción
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.02 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <t t-if="object.ed_meses_trabajados_tear >= 1">
+                                    <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                        <t t-out="object.ed_meses_trabajados_tear * 0.02"/>
+                                    </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; padding:4px;">
+                                3.2.- En centros de enseñanza reglada
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                3.1.1.- Por mes o fracción
+                            </td>
+                            <td style="border:1px solid #000; padding:4px 4px 4px 10px;">
+                                (0.01 puntos)
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <t t-if="object.ed_meses_trabajados_er >= 1">
+                                    <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                        <t t-out="object.ed_meses_trabajados_er * 0.01"/>
+                                    </b></p>
+                                </t>
+                                <t t-else=""></t>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="width:90%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; margin: 0 auto">
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; font-weight:bold; padding:4px;">
+                                4. EXPERIENCIA PROFESIONAL (MÁX. 1 PUNTO)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                Con informe vinculante del departamenteo de la plaza para que la que opta el aspirante. <br/>
+                                Ponderado por el centro educativo.
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; text-align:center">
+                                <p/>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="width:90%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; margin: 0 auto">
+                        <tr>
+                            <td colspan="3" style="border:1px solid #000; font-weight:bold; padding:4px;">
+                                5. ENTREVISTA PROFESIONAL (MÁX. 4 PUNTOS)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #000; padding:4px 4px 4px 20px;">
+                                Ponderado por el centro educativo.
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                </b></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table style="width:90%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:14px; margin: 0 auto">
+                        <tr>
+                            <td colspan="2" style="border:1px solid #000; font-weight:bold; padding:4px; text-align:right">
+                                TOTAL PUNTOS:
+                            </td>
+                            <td style="border:1px solid #000; padding:4px; vertical-align:middle; text-align:center;">
+                                <p style="margin:auto; vertical-align:middle; text-align:center;"><b>
+                                    <t t-out="object.total"/>
+                                </b></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr width="97%"
+                        style="background-color: rgb(204,204,204); border: medium none; clear: both; display: block;
+                            font-size: 0px; min-height: 1px; line-height: 0; margin: 16px 0px 16px 0px;"/>
+                    <h3 style="color:#9A6C8E;">
+                        <strong>¿Tienes alguna duda?</strong>
+                    </h3>
+                    Puedes escribir un correo a <a href="mailto:curriculum@cesramonycajal.com">curriculum@cesramonycajal.com</a>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

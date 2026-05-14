@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+  
+    <t t-name="awesome_owl.playground">
+        <div class="p-3">
+          <h1 class="text-center">- Bolsa de profesorado. Autobaremo -</h1>
+        <Autobaremo />
+        </div>
+    </t>
+  
+</templates>

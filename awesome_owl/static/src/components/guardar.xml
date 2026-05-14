@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <t t-name="awesome_owl.guardar" owl="1">
+    <h1>Resumen de la solicitud</h1>
+      <div>
+        Nombre completo: <t t-esc="props.data.ncompleto"/><br/>
+        Fecha de expedición del título: <t t-esc="props.data.fechaexpedicion"/><br/>
+        Titulación seleccionada: <t t-esc="props.data.titulacion"/><br/>
+        ID Titulación: <t t-esc="props.data.titulacionid"></t><br/>
+        Correo electrónico: <t t-esc="props.data.correoe"/><br/>
+        <button type="button" class="btn btn-primary" t-on-click="guardar"> Enviar </button>
+      </div>
+  </t>
+</templates>

@@ -73,7 +73,7 @@
                     </group>
                     <notebook>
                         <page string="Expedientes disciplinarios">
-                            <field name="disciplinary_ids">
+                            <field name="disciplinary_ids" context="{'redirect_to_web_form': True, 'student_id': id}">
                                 <tree>
                                     <field name="date"/>
                                     <field name="incident_type"/>
@@ -81,6 +81,20 @@
                                     <field name="time_slot"/>
                                     <field name="ryc_teacher"/>
                                 </tree>
+                                <form>
+                                    <group>
+                                        <group string="Incidencia">
+                                            <field name="incident_type"/>
+                                            <field name="incident"/>
+                                            <field name="date"/>
+                                            <field name="time_slot"/>
+                                        </group>
+                                        <group string="Detalles">
+                                            <field name="ryc_teacher"/>
+                                            <field name="description"/>
+                                        </group>
+                                    </group>
+                                </form>
                             </field>
                         </page>
                     </notebook>

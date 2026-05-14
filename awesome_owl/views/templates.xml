@@ -1,0 +1,62 @@
+<odoo>
+    <data>
+          <template id="awesome_owl.playground" name="Awesome T-Shirt thank you">
+            <html>
+                <head>
+                    <meta charset="utf-8"/>
+                    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+                    <t t-call-assets="awesome_owl.assets_frontend" t-js="false"/>
+                    <t t-call-assets="awesome_owl.assets_frontend" t-css="false"/>
+                    <link type="image/x-icon" rel="shortcut icon" href="/web/static/img/favicon.ico"/>
+                    <t t-call-assets="awesome_owl.assets_playground"/>
+                </head>
+
+                <body>
+                </body>
+            </html>
+          </template>
+        <template id="awesome_owl.solicitud-ok" name="Solicitud enviada">
+            <html>
+                <head>
+                    <meta charset="utf-8"/>
+                    <meta name="viewport"
+                          content="width=device-width, initial-scale=1"/>
+
+                    <!-- Bootstrap + assets frontend -->
+                    <t t-call-assets="web.assets_frontend" t-js="true"/>
+                    <t t-call-assets="web.assets_frontend" t-css="true"/>
+
+                    <link rel="shortcut icon"
+                          href="/web/static/img/favicon.ico"/>
+                </head>
+                <body class="bg-light">
+                    <div class="container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-7">
+                                <div class="card shadow border-0">
+                                    <div class="card-body text-center p-5">
+                                        <h1 class="text-success mb-4">
+                                            Solicitud enviada correctamente
+                                        </h1>
+                                        <p class="fs-5 mb-2">
+                                            Hemos recibido tu solicitud con el correo:
+                                        </p>
+                                        <h4 class="text-primary mb-4"
+                                            t-esc="email"/>
+                                        <p class="text-muted mb-4">
+                                            Revisaremos tu candidatura lo antes posible.
+                                        </p>
+                                        <a href="https://www.cesramonycajal.com/wp-bolsaprof/"
+                                           class="btn btn-primary btn-lg">
+                                            Volver al inicio
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        </template>
+    </data>
+</odoo>
