@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="disciplinary_web.form_app">
+        <div class="disciplinary-app">
+            <DisciplinaryForm student="props.student"/>
+        </div>
+    </t>
+
+    <t t-name="disciplinary_web.form_component">
+        <div class="disciplinary-form">
+            <t t-if="state.step === 'form'">
+                <t t-if="state.errors.submit">
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="fa fa-exclamation-triangle me-2"></i>
+                        <strong>Error:</strong>
+                        <t t-esc="state.errors.submit"/>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"/>
+                    </div>
+                </t>
+
+                <form class="needs-validation" novalidate="">
+                    <div class="mb-4">
+                        <label for="ryc_student" class="form-label fw-semibold fs-6">
+                            <i class="fa fa-user-graduate me-2 text-primary"></i>
+                            Estudiante
+                            <span class="text-danger">*</span>
+                        </label>
+                        <t t-if="props.student">
+                            <div class="input-group">
+                                <input
+                                    type="text"
+                                    class="form-control form-control-lg bg-light"
+                                    t-att-value="props.student.full_name + ' (' + props.student.student_code + ')'"
+                                    readonly=""
+                                />
+                                <input type="hidden" t-att-value="props.student.id" name="ryc_student"/>
+                            </div>
+                            <div class="form-text text-muted">
+                                <i class="fa fa-info-circle me-1"></i>
+                                Estudiante preseleccionado desde el registro del alumno
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <select
+                                id="ryc_student"
+                                class="form-select form-select-lg"
+                                t-att-class="{'is-invalid': state.errors.ryc_student}"
+                                t-att-value="state.formData.ryc_student"
+                                t-on-change="(ev) => this.updateField('ryc_student', ev.target.value)"
+                                t-att-disabled="state.loading"
+                            >
+                                <option value="">-- Selecciona un estudiante --</option>
+                                <t t-foreach="state.students" t-as="s" t-key="s.id">
+                                    <option t-att-value="s.id">
+                                        <t t-esc="s.name"/> (<t t-esc="s.code"/>)
+                                    </option>
+                                </t>
+                            </select>
+                        </t>
+                        <t t-if="state.errors.ryc_student">
+                            <div class="invalid-feedback d-block">
+                                <i class="fa fa-exclamation-circle me-1"></i>
+                                <t t-esc="state.errors.ryc_student"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="incident_type" class="form-label fw-semibold fs-6">
+                            <i class="fa fa-exclamation-triangle me-2 text-warning"></i>
+                            Tipo de Incidencia
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select
+                            id="incident_type"
+                            class="form-select form-select-lg"
+                            t-att-class="{'is-invalid': state.errors.incident_type}"
+                            t-att-value="state.formData.incident_type"
+                            t-on-change="(ev) => this.updateField('incident_type', ev.target.value)"
+                            t-att-disabled="state.loading"
+                        >
+                            <option value="">-- Selecciona un tipo --</option>
+                            <t t-foreach="incidentTypes" t-as="type" t-key="type.value">
+                                <option t-att-value="type.value">
+                                    <t t-esc="type.label"/>
+                                </option>
+                            </t>
+                        </select>
+                        <t t-if="state.errors.incident_type">
+                            <div class="invalid-feedback d-block">
+                                <i class="fa fa-exclamation-circle me-1"></i>
+                                <t t-esc="state.errors.incident_type"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="incident" class="form-label fw-semibold fs-6">
+                            <i class="fa fa-list-check me-2 text-info"></i>
+                            Conducta
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select
+                            id="incident"
+                            class="form-select form-select-lg"
+                            t-att-class="{'is-invalid': state.errors.incident}"
+                            t-att-value="state.formData.incident"
+                            t-on-change="(ev) => this.updateField('incident', ev.target.value)"
+                            t-att-disabled="state.loading"
+                        >
+                            <option value="">-- Selecciona una conducta --</option>
+                            <t t-foreach="incidents" t-as="inc" t-key="inc.value">
+                                <option t-att-value="inc.value">
+                                    <t t-esc="inc.label"/>
+                                </option>
+                            </t>
+                        </select>
+                        <t t-if="state.errors.incident">
+                            <div class="invalid-feedback d-block">
+                                <i class="fa fa-exclamation-circle me-1"></i>
+                                <t t-esc="state.errors.incident"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="date" class="form-label fw-semibold fs-6">
+                            <i class="fa fa-calendar me-2 text-success"></i>
+                            Fecha
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input
+                            type="date"
+                            id="date"
+                            class="form-control form-control-lg"
+                            t-att-class="{'is-invalid': state.errors.date}"
+                            t-att-value="state.formData.date"
+                            t-on-change="(ev) => this.updateField('date', ev.target.value)"
+                            t-att-disabled="state.loading"
+                        />
+                        <t t-if="state.errors.date">
+                            <div class="invalid-feedback d-block">
+                                <i class="fa fa-exclamation-circle me-1"></i>
+                                <t t-esc="state.errors.date"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="time_slot" class="form-label fw-semibold fs-6">
+                            <i class="fa fa-clock me-2 text-secondary"></i>
+                            Franja Horaria
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select
+                            id="time_slot"
+                            class="form-select form-select-lg"
+                            t-att-class="{'is-invalid': state.errors.time_slot}"
+                            t-att-value="state.formData.time_slot"
+                            t-on-change="(ev) => this.updateField('time_slot', ev.target.value)"
+                            t-att-disabled="state.loading"
+                        >
+                            <option value="">-- Selecciona franja horaria --</option>
+                            <t t-foreach="timeSlots" t-as="slot" t-key="slot.value">
+                                <option t-att-value="slot.value">
+                                    <t t-esc="slot.label"/>
+                                </option>
+                            </t>
+                        </select>
+                        <t t-if="state.errors.time_slot">
+                            <div class="invalid-feedback d-block">
+                                <i class="fa fa-exclamation-circle me-1"></i>
+                                <t t-esc="state.errors.time_slot"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold fs-6">
+                            <i class="fa fa-comment me-2 text-muted"></i>
+                            Observaciones
+                        </label>
+                        <textarea
+                            id="description"
+                            class="form-control"
+                            rows="4"
+                            placeholder="Añade observaciones adicionales..."
+                            t-att-value="state.formData.description"
+                            t-on-change="(ev) => this.updateField('description', ev.target.value)"
+                            t-att-disabled="state.loading"
+                        />
+                    </div>
+
+                    <div class="d-flex flex-column flex-md-row gap-3 justify-content-md-end mt-4">
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary btn-lg px-4"
+                            t-on-click="this.resetForm"
+                            t-att-disabled="state.loading"
+                        >
+                            <i class="fa fa-eraser me-2"></i>
+                            Limpiar
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-lg px-5"
+                            t-on-click="this.submitForm"
+                            t-att-disabled="state.loading"
+                        >
+                            <t t-if="state.loading">
+                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"/>
+                                Guardando...
+                            </t>
+                            <t t-else="">
+                                <i class="fa fa-save me-2"></i>
+                                Guardar Parte
+                            </t>
+                        </button>
+                    </div>
+                </form>
+            </t>
+
+            <t t-if="state.step === 'success'">
+                <div class="text-center py-5">
+                    <div class="success-icon mb-4">
+                        <i class="fa fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    <h2 class="text-success fw-bold mb-3">¡Parte Disciplinario Registrado!</h2>
+                    <div class="alert alert-success shadow-sm mb-4">
+                        <h5 class="alert-heading mb-2">
+                            <i class="fa fa-info-circle me-2"></i>
+                            Registro Exitoso
+                        </h5>
+                        <p class="mb-0">
+                            El parte disciplinario ha sido registrado correctamente en el sistema.
+                            <br/>
+                            <strong>ID del registro:</strong>
+                            <span class="badge bg-success ms-1">
+                                <t t-esc="state.successId"/>
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="mt-5">
+                        <p class="text-muted mb-4 fs-5">¿Qué deseas hacer ahora?</p>
+                        <div class="d-flex flex-column flex-md-row gap-3 justify-content-md-center">
+                            <button
+                                type="button"
+                                class="btn btn-success btn-lg px-4"
+                                t-on-click="this.createAnother"
+                            >
+                                <i class="fa fa-plus-circle me-2"></i>
+                                Crear Otro Parte
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary btn-lg px-4"
+                                t-on-click="this.goToOdoo"
+                            >
+                                <i class="fa fa-arrow-right me-2"></i>
+                                Ir a Odoo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

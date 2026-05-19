@@ -1,10 +1,16 @@
-odoo.define('disciplinary_web', function(require) {
-    'use strict';
+/** @odoo-module **/
+import { mount, whenReady } from "@odoo/owl";
+import { DisciplinaryApp } from "./disciplinary_form";
+import { templates } from "@web/core/assets";
 
-    // Registrar el componente OWL
-    const { registry } = require("@web/core/registry");
-    const { DisciplinaryForm } = require('disciplinary_web/static/src/js/disciplinary_form');
-
-    // Registrar el componente en el registro de componentes
-    registry.category("components").add("DisciplinaryForm", DisciplinaryForm);
+whenReady(() => {
+    const root = document.querySelector("#disciplinary_app_root");
+    if (root) {
+        const props = JSON.parse(root.dataset.props || "{}");
+        mount(DisciplinaryApp, root, {
+            templates,
+            props,
+            dev: true,
+        });
+    }
 });

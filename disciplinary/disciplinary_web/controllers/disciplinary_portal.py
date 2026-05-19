@@ -1,6 +1,7 @@
 from odoo import http
 from odoo.http import request
 import logging
+import json
 
 _logger = logging.getLogger(__name__)
 
@@ -9,12 +10,25 @@ class DisciplinaryWeb(http.Controller):
 
     def _has_access(self, user):
         if user.has_group('base.group_system'):
+            _logger.info(f"Acceso permitido para {user.name} (Admin)")
             return True
         if user.has_group('ryc_student_disciplinary.group_disciplinary_admin'):
+            _logger.info(f"Acceso permitido para {user.name} (Disciplinary Admin)")
             return True
         if user.has_group('ryc_student_disciplinary.group_disciplinary_profesor'):
+            _logger.info(f"Acceso permitido para {user.name} (Profesor)")
             return True
-        return request.env['ryc.course.group'].search_count([('tutor_id.user_id', '=', user.id)]) > 0
+        
+        # Verificar si es tutor
+        employee = request.env['hr.employee'].sudo().search([('user_id', '=', user.id)], limit=1)
+        if employee:
+            is_tutor = request.env['ryc.course.group'].sudo().search_count([('tutor_id', '=', employee.id)]) > 0
+            if is_tutor:
+                _logger.info(f"Acceso permitido para {user.name} (Tutor)")
+                return True
+            
+        _logger.warning(f"Acceso denegado para {user.name}: No pertenece a grupos requeridos ni es tutor")
+        return False
 
     @http.route('/student/disciplinary/new', auth='user', type='http', website=True)
     def new_disciplinary(self, **kw):
@@ -24,7 +38,8 @@ class DisciplinaryWeb(http.Controller):
         if not self._has_access(user):
             _logger.warning(f"Acceso denegado para usuario {user.name} - no tiene permisos suficientes")
             return request.render('disciplinary_web.unauthorized', {
-                'error_message': f'Usuario {user.name} no tiene permisos para acceder a esta sección.'
+                'error_message': f'Usuario {user.name} no tiene permisos para acceder a esta sección.',
+                'json_dumps': json.dumps,
             })
 
         # Obtener estudiante preseleccionado si viene en los parámetros
@@ -40,6 +55,7 @@ class DisciplinaryWeb(http.Controller):
 
         return request.render('disciplinary_web.form', {
             'student': student,
+            'json_dumps': json.dumps,
         })
 
     @http.route('/student/disciplinary/save', auth='user', type='json', website=True)

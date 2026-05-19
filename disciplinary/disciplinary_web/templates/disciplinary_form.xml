@@ -6,17 +6,12 @@
             <meta name="csrf-token" t-att-content="request.csrf_token()"/>
         </xpath>
 
-        <xpath expr="//head" position="inside">
-            <t t-call-assets="web.assets_frontend" t-js="false"/>
-            <t t-call-assets="web.assets_frontend" t-css="false"/>
-        </xpath>
-
         <xpath expr="//div[@id='wrapwrap']" position="inside">
             <div class="container-fluid py-4">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-10 col-lg-8 col-xl-6">
                         <div class="card shadow-lg border-0">
-                            <div class="card-header bg-gradient-primary text-white py-4">
+                            <div class="card-header bg-primary text-white py-4">
                                 <div class="d-flex align-items-center">
                                     <i class="fa fa-clipboard-list fa-2x me-3"></i>
                                     <div>
@@ -26,287 +21,20 @@
                                 </div>
                             </div>
                             <div class="card-body p-4">
-                                <t t-component="DisciplinaryForm" t-props="{'student': student}"/>
+                                <div id="disciplinary_app_root" t-att-data-props="json_dumps({'student': {'id': student.id, 'full_name': student.full_name, 'student_code': student.student_code} if student else None})">
+                                    <div class="text-center p-5">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Cargando...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Cargando aplicación...</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </xpath>
-    </template>
-
-    <!-- Componente OWL del formulario -->
-    <template id="form_component" name="Disciplinary Form Component">
-        <div class="disciplinary-form">
-            <!-- Paso 1: Formulario -->
-            <t t-if="state.step === 'form'">
-                <!-- Mensajes de error generales -->
-                <t t-if="state.errors.submit">
-                    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-                        <i class="fa fa-exclamation-triangle me-2"></i>
-                        <strong>Error:</strong>
-                        <t t-esc="state.errors.submit"/>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"/>
-                    </div>
-                </t>
-
-                <form class="needs-validation" novalidate="">
-                    <!-- Campo: Estudiante -->
-                    <div class="mb-4">
-                        <label for="ryc_student" class="form-label fw-semibold fs-6">
-                            <i class="fa fa-user-graduate me-2 text-primary"></i>
-                            Estudiante
-                            <span class="text-danger">*</span>
-                        </label>
-                        <t t-if="props.student">
-                            <!-- Estudiante preseleccionado -->
-                            <div class="input-group">
-                                <input
-                                    type="text"
-                                    class="form-control form-control-lg bg-light"
-                                    t-value="props.student.full_name + ' (' + props.student.student_code + ')'"
-                                    readonly=""
-                                />
-                                <input type="hidden" t-att-value="props.student.id" name="ryc_student"/>
-                            </div>
-                            <div class="form-text text-muted">
-                                <i class="fa fa-info-circle me-1"></i>
-                                Estudiante preseleccionado desde el registro del alumno
-                            </div>
-                        </t>
-                        <t t-else="">
-                            <!-- Selección normal de estudiante -->
-                            <select
-                                id="ryc_student"
-                                class="form-select form-select-lg"
-                                t-att-class="{'is-invalid': state.errors.ryc_student}"
-                                t-value="state.formData.ryc_student"
-                                t-on-change="(ev) => updateField('ryc_student', ev.target.value)"
-                                t-att-disabled="state.loading"
-                            >
-                                <option value="">-- Selecciona un estudiante --</option>
-                                <t t-foreach="state.students" t-as="student" t-key="student.id">
-                                    <option t-att-value="student.id">
-                                        <t t-esc="student.name"/> (<t t-esc="student.code"/>)
-                                    </option>
-                                </t>
-                            </select>
-                        </t>
-                        <t t-if="state.errors.ryc_student">
-                            <div class="invalid-feedback d-block">
-                                <i class="fa fa-exclamation-circle me-1"></i>
-                                <t t-esc="state.errors.ryc_student"/>
-                            </div>
-                        </t>
-                    </div>
-
-                    <!-- Campo: Tipo de Incidencia -->
-                    <div class="mb-4">
-                        <label for="incident_type" class="form-label fw-semibold fs-6">
-                            <i class="fa fa-exclamation-triangle me-2 text-warning"></i>
-                            Tipo de Incidencia
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select
-                            id="incident_type"
-                            class="form-select form-select-lg"
-                            t-att-class="{'is-invalid': state.errors.incident_type}"
-                            t-value="state.formData.incident_type"
-                            t-on-change="(ev) => updateField('incident_type', ev.target.value)"
-                            t-att-disabled="state.loading"
-                        >
-                            <option value="">-- Selecciona un tipo --</option>
-                            <t t-foreach="incidentTypes" t-as="type" t-key="type.value">
-                                <option t-att-value="type.value">
-                                    <t t-esc="type.label"/>
-                                </option>
-                            </t>
-                        </select>
-                        <t t-if="state.errors.incident_type">
-                            <div class="invalid-feedback d-block">
-                                <i class="fa fa-exclamation-circle me-1"></i>
-                                <t t-esc="state.errors.incident_type"/>
-                            </div>
-                        </t>
-                    </div>
-
-                    <!-- Campo: Conducta -->
-                    <div class="mb-4">
-                        <label for="incident" class="form-label fw-semibold fs-6">
-                            <i class="fa fa-list-check me-2 text-info"></i>
-                            Conducta
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select
-                            id="incident"
-                            class="form-select form-select-lg"
-                            t-att-class="{'is-invalid': state.errors.incident}"
-                            t-value="state.formData.incident"
-                            t-on-change="(ev) => updateField('incident', ev.target.value)"
-                            t-att-disabled="state.loading"
-                        >
-                            <option value="">-- Selecciona una conducta --</option>
-                            <t t-foreach="incidents" t-as="inc" t-key="inc.value">
-                                <option t-att-value="inc.value">
-                                    <t t-esc="inc.label"/>
-                                </option>
-                            </t>
-                        </select>
-                        <t t-if="state.errors.incident">
-                            <div class="invalid-feedback d-block">
-                                <i class="fa fa-exclamation-circle me-1"></i>
-                                <t t-esc="state.errors.incident"/>
-                            </div>
-                        </t>
-                    </div>
-
-                    <!-- Campo: Fecha -->
-                    <div class="mb-4">
-                        <label for="date" class="form-label fw-semibold fs-6">
-                            <i class="fa fa-calendar me-2 text-success"></i>
-                            Fecha
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="date"
-                            id="date"
-                            class="form-control form-control-lg"
-                            t-att-class="{'is-invalid': state.errors.date}"
-                            t-value="state.formData.date"
-                            t-on-change="(ev) => updateField('date', ev.target.value)"
-                            t-att-disabled="state.loading"
-                        />
-                        <t t-if="state.errors.date">
-                            <div class="invalid-feedback d-block">
-                                <i class="fa fa-exclamation-circle me-1"></i>
-                                <t t-esc="state.errors.date"/>
-                            </div>
-                        </t>
-                    </div>
-
-                    <!-- Campo: Franja Horaria -->
-                    <div class="mb-4">
-                        <label for="time_slot" class="form-label fw-semibold fs-6">
-                            <i class="fa fa-clock me-2 text-secondary"></i>
-                            Franja Horaria
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select
-                            id="time_slot"
-                            class="form-select form-select-lg"
-                            t-att-class="{'is-invalid': state.errors.time_slot}"
-                            t-value="state.formData.time_slot"
-                            t-on-change="(ev) => updateField('time_slot', ev.target.value)"
-                            t-att-disabled="state.loading"
-                        >
-                            <option value="">-- Selecciona franja horaria --</option>
-                            <t t-foreach="timeSlots" t-as="slot" t-key="slot.value">
-                                <option t-att-value="slot.value">
-                                    <t t-esc="slot.label"/>
-                                </option>
-                            </t>
-                        </select>
-                        <t t-if="state.errors.time_slot">
-                            <div class="invalid-feedback d-block">
-                                <i class="fa fa-exclamation-circle me-1"></i>
-                                <t t-esc="state.errors.time_slot"/>
-                            </div>
-                        </t>
-                    </div>
-
-                    <!-- Campo: Observaciones -->
-                    <div class="mb-4">
-                        <label for="description" class="form-label fw-semibold fs-6">
-                            <i class="fa fa-comment me-2 text-muted"></i>
-                            Observaciones
-                        </label>
-                        <textarea
-                            id="description"
-                            class="form-control"
-                            rows="4"
-                            placeholder="Añade observaciones adicionales..."
-                            t-value="state.formData.description"
-                            t-on-change="(ev) => updateField('description', ev.target.value)"
-                            t-att-disabled="state.loading"
-                        />
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="d-flex flex-column flex-md-row gap-3 justify-content-md-end mt-4">
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary btn-lg px-4"
-                            t-on-click="resetForm"
-                            t-att-disabled="state.loading"
-                        >
-                            <i class="fa fa-eraser me-2"></i>
-                            Limpiar
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-lg px-5"
-                            t-on-click="submitForm"
-                            t-att-disabled="state.loading"
-                        >
-                            <t t-if="state.loading">
-                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"/>
-                                Guardando...
-                            </t>
-                            <t t-else="">
-                                <i class="fa fa-save me-2"></i>
-                                Guardar Parte
-                            </t>
-                        </button>
-                    </div>
-                </form>
-            </t>
-
-            <!-- Paso 2: Confirmación de éxito -->
-            <t t-if="state.step === 'success'">
-                <div class="text-center py-5">
-                    <div class="success-icon mb-4">
-                        <i class="fa fa-check-circle fa-5x text-success"></i>
-                    </div>
-                    <h2 class="text-success fw-bold mb-3">¡Parte Disciplinario Registrado!</h2>
-                    <div class="alert alert-success shadow-sm mb-4">
-                        <h5 class="alert-heading mb-2">
-                            <i class="fa fa-info-circle me-2"></i>
-                            Registro Exitoso
-                        </h5>
-                        <p class="mb-0">
-                            El parte disciplinario ha sido registrado correctamente en el sistema.
-                            <br/>
-                            <strong>ID del registro:</strong>
-                            <span class="badge bg-success ms-1">
-                                <t t-esc="state.successId"/>
-                            </span>
-                        </p>
-                    </div>
-
-                    <div class="mt-5">
-                        <p class="text-muted mb-4 fs-5">¿Qué deseas hacer ahora?</p>
-                        <div class="d-flex flex-column flex-md-row gap-3 justify-content-md-center">
-                            <button
-                                type="button"
-                                class="btn btn-success btn-lg px-4"
-                                t-on-click="createAnother"
-                            >
-                                <i class="fa fa-plus-circle me-2"></i>
-                                Crear Otro Parte
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-outline-primary btn-lg px-4"
-                                t-on-click="goToOdoo"
-                            >
-                                <i class="fa fa-arrow-right me-2"></i>
-                                Ir a Odoo
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </t>
-        </div>
     </template>
 
     <!-- Página de error - No autorizado -->
@@ -338,10 +66,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-center mt-4">
-                                    <a href="/web/login" class="btn btn-primary btn-lg px-4">
+                                <div class="text-center mt-4 d-flex flex-column flex-md-row gap-3 justify-content-center">
+                                    <a t-if="not request.session.uid" href="/web/login" class="btn btn-primary btn-lg px-4">
                                         <i class="fa fa-sign-in-alt me-2"></i>
-                                        Volver al Login
+                                        Iniciar Sesión
+                                    </a>
+                                    <a t-if="request.session.uid" href="/web" class="btn btn-outline-primary btn-lg px-4">
+                                        <i class="fa fa-home me-2"></i>
+                                        Ir al Panel de Odoo
+                                    </a>
+                                    <a href="mailto:admin@centro.com" class="btn btn-link text-muted">
+                                        <i class="fa fa-envelope me-1"></i> Contactar Admin
                                     </a>
                                 </div>
                             </div>

@@ -2,73 +2,69 @@ odoo.define('ryc_student_disciplinary.redirect_add_line', ['web.dom_ready'], fun
     'use strict';
 
     $(document).ready(function() {
-        console.log('Disciplinary redirect script loaded');
+        console.log('Disciplinary redirect script loaded - Odoo version check');
 
         function getStudentId($button) {
-            const $form = $button.closest('.o_form_view');
+            // Primero intentar obtener el ID desde la URL
+            const urlIdMatch = window.location.href.match(/(?:#|\?|&)id=(\d+)/);
+            if (urlIdMatch) {
+                console.log('Student ID from URL:', urlIdMatch[1]);
+                return urlIdMatch[1];
+            }
+
+            // Buscar en el formulario
+            const $form = $button.closest('.o_form_view, .o_view_controller');
             let studentId = $form.find('input[name="id"]').val();
             if (!studentId) {
-                studentId = $form.find('.o_field_one2many[data-field="disciplinary_ids"] input[name="id"]').val();
+                studentId = $form.find('[data-field="id"] input').val();
             }
             if (!studentId) {
-                studentId = $form.find('[data-field="id"] input').val() || $form.find('[data-name="id"] input').val();
+                studentId = $form.find('[name="id"]').val();
             }
-            if (!studentId) {
-                const urlIdMatch = window.location.href.match(/(?:#|\?|&)id=(\d+)/);
-                if (urlIdMatch) {
-                    studentId = urlIdMatch[1];
-                }
-            }
+
             console.log('Student ID encontrado:', studentId);
             return studentId;
         }
 
         function interceptAddLineClicks() {
-            console.log('Buscando botones Add a line...');
+            // Estrategia: Buscar botones de añadir línea en campos de expedientes disciplinarios
+            // Odoo 17 usa clases específicas y atributos data-field
+            $('.o_field_x2many_list_row_add, .o_field_one2many .o_list_renderer .o_field_x2many_list_row_add').each(function() {
+                const $button = $(this);
+                
+                // Verificar si pertenece al campo disciplinary_ids o contiene texto relacionado
+                const isDisciplinaryField = $button.closest('[data-field="disciplinary_ids"]').length > 0 || 
+                                          $button.attr('data-field') === 'disciplinary_ids';
+                
+                const buttonText = $button.text().trim().toLowerCase();
+                const isAddLineText = buttonText.includes('add a line') || 
+                                     buttonText.includes('add line') || 
+                                     buttonText.includes('añadir una línea') || 
+                                     buttonText.includes('añadir linea') ||
+                                     buttonText.includes('crear parte');
 
-            // Buscar todos los campos one2many
-            $('.o_field_one2many').each(function() {
-                const $field = $(this);
-                const fieldName = $field.attr('data-field') || $field.attr('data-name') || $field.attr('name');
+                if (isDisciplinaryField || (isAddLineText && $button.closest('.o_notebook').length > 0)) {
+                    if ($button.hasClass('disciplinary-redirect-processed')) {
+                        return;
+                    }
+                    $button.addClass('disciplinary-redirect-processed');
 
-                if (fieldName === 'disciplinary_ids') {
-                    console.log('Encontrado campo disciplinary_ids');
+                    $button.off('click').on('click', function(ev) {
+                        ev.preventDefault();
+                        ev.stopPropagation();
 
-                    // Buscar botones dentro de este campo
-                    $field.find('a, button').each(function() {
-                        const $button = $(this);
-                        const buttonText = $button.text().trim();
-
-                        // Verificar si es un botón "Add a line"
-                        if (buttonText.includes('Add a line') || $button.hasClass('o_field_x2many_list_row_add')) {
-                            console.log('Encontrado botón Add a line');
-
-                            if ($button.hasClass('disciplinary-redirect-processed')) {
-                                return;
-                            }
-                            $button.addClass('disciplinary-redirect-processed');
-
-                            $button.off('click').on('click', function(ev) {
-                                console.log('Clic en botón Add a line interceptado');
-                                ev.preventDefault();
-                                ev.stopPropagation();
-
-                                const studentId = getStudentId($button);
-                                if (studentId && studentId !== 'New' && !isNaN(studentId)) {
-                                    console.log('Redirigiendo a:', `/student/disciplinary/new?student_id=${studentId}`);
-                                    window.location.href = `/student/disciplinary/new?student_id=${studentId}`;
-                                } else {
-                                    alert('Primero debe guardar el estudiante antes de crear un parte disciplinario.');
-                                }
-                                return false;
-                            });
-
-                            // Cambiar apariencia del botón
-                            $button.css('background-color', '#007bff');
-                            $button.css('color', 'white');
-                            $button.html('<i class="fa fa-plus"></i> Crear Parte Disciplinario');
+                        const studentId = getStudentId($button);
+                        if (studentId && studentId !== 'New' && !isNaN(studentId)) {
+                            window.location.href = `/student/disciplinary/new?student_id=${studentId}`;
+                        } else {
+                            alert('Primero debe guardar el registro del estudiante antes de crear un parte disciplinario.');
                         }
+                        return false;
                     });
+
+                    // Estilizar el botón para que destaque
+                    $button.addClass('btn-primary').removeClass('btn-secondary');
+                    $button.html('<i class="fa fa-plus me-1"></i> Crear Parte Disciplinario');
                 }
             });
         }
@@ -77,13 +73,38 @@ odoo.define('ryc_student_disciplinary.redirect_add_line', ['web.dom_ready'], fun
         interceptAddLineClicks();
 
         // Re-ejecutar periódicamente
-        setInterval(interceptAddLineClicks, 2000);
+        setInterval(interceptAddLineClicks, 1000);
 
-        // También ejecutar cuando cambie el DOM
-        $(document).on('DOMNodeInserted', function(e) {
-            if ($(e.target).hasClass('o_field_one2many') || $(e.target).find('.o_field_one2many').length > 0) {
-                setTimeout(interceptAddLineClicks, 500);
+        // Ejecutar cuando cambie el DOM (más específico)
+        $(document).on('DOMNodeInserted DOMSubtreeModified', function(e) {
+            if ($(e.target).is('a, button') || $(e.target).find('a, button').length > 0) {
+                setTimeout(interceptAddLineClicks, 100);
             }
         });
+
+        // También escuchar por cambios en el contenido
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    const addedNodes = mutation.addedNodes;
+                    for (let i = 0; i < addedNodes.length; i++) {
+                        const node = addedNodes[i];
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            if ($(node).is('a, button') || $(node).find('a, button').length > 0) {
+                                setTimeout(interceptAddLineClicks, 100);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        console.log('Script de redirección completamente inicializado');
     });
 });

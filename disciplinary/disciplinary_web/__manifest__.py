@@ -13,8 +13,9 @@
     ],
     'assets': {
         'web.assets_frontend': [
-            'disciplinary_web/static/src/js/main.js',
+            'disciplinary_web/static/src/xml/disciplinary_form.xml',
             'disciplinary_web/static/src/js/disciplinary_form.js',
+            'disciplinary_web/static/src/js/main.js',
         ],
     },
     'installable': True,

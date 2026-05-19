@@ -18,11 +18,18 @@ export class DisciplinaryForm extends Component {
             students: [],
             loading: false,
             errors: {},
-            step: 'form', // 'form' o 'success'
+            step: 'form',
             successId: null,
         });
 
-        // Preseleccionar estudiante si viene en el contexto
+        // Vincular métodos
+        this.updateField = this.updateField.bind(this);
+        this.submitForm = this.submitForm.bind(this);
+        this.resetForm = this.resetForm.bind(this);
+        this.createAnother = this.createAnother.bind(this);
+        this.goToOdoo = this.goToOdoo.bind(this);
+        this.loadStudents = this.loadStudents.bind(this);
+
         if (this.props.student) {
             this.state.formData.ryc_student = this.props.student.id.toString();
         }
@@ -77,11 +84,19 @@ export class DisciplinaryForm extends Component {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]') ? .content,
                 },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'call',
+                    params: {},
+                })
             });
             const data = await response.json();
-            this.state.students = data.students || [];
+            if (data.result && data.result.students) {
+                this.state.students = data.result.students;
+            } else if (data.error) {
+                console.error('RPC Error:', data.error);
+            }
         } catch (error) {
             console.error('Error loading students:', error);
         } finally {
@@ -133,17 +148,20 @@ export class DisciplinaryForm extends Component {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]') ? .content,
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'call',
+                    params: formData,
+                })
             });
             const data = await response.json();
 
-            if (data.status === 'success') {
-                this.state.successId = data.id;
+            if (data.result && data.result.status === 'success') {
+                this.state.successId = data.result.id;
                 this.state.step = 'success';
             } else {
-                this.state.errors.submit = data.message;
+                this.state.errors.submit = data.result ? data.result.message : (data.error ? data.error.message : 'Error desconocido');
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -176,3 +194,12 @@ export class DisciplinaryForm extends Component {
 }
 
 DisciplinaryForm.components = {};
+
+export class DisciplinaryApp extends Component {
+    static template = "disciplinary_web.form_app";
+    static components = { DisciplinaryForm };
+
+    setup() {
+        this.DisciplinaryForm = DisciplinaryForm;
+    }
+}
