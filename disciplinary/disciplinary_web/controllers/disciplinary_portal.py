@@ -37,7 +37,7 @@ class DisciplinaryWeb(http.Controller):
 
         if not self._has_access(user):
             _logger.warning(f"Acceso denegado para usuario {user.name} - no tiene permisos suficientes")
-            return request.render('disciplinary_web.unauthorized', {
+            return request.render('disciplinary_web.disciplinary_unauthorized_page', {
                 'error_message': f'Usuario {user.name} no tiene permisos para acceder a esta sección.',
                 'json_dumps': json.dumps,
             })
@@ -53,7 +53,7 @@ class DisciplinaryWeb(http.Controller):
             except (ValueError, TypeError):
                 student = None
 
-        return request.render('disciplinary_web.form', {
+        return request.render('disciplinary_web.disciplinary_form_page', {
             'student': student,
             'json_dumps': json.dumps,
         })

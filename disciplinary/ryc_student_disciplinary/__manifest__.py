@@ -20,11 +20,6 @@
         'reports/ryc_student_reports.xml',
         'reports/ryc_disciplinary_reports.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'ryc_student_disciplinary/static/src/js/redirect_add_line.js',
-        ],
-    },
     'application': True,
     'installable': True,
     'license': 'LGPL-3',

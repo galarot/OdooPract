@@ -73,7 +73,7 @@
                     </group>
                     <notebook>
                         <page string="Expedientes disciplinarios">
-                            <field name="disciplinary_ids" context="{'redirect_to_web_form': True, 'student_id': id}">
+                            <field name="disciplinary_ids">
                                 <tree>
                                     <field name="date"/>
                                     <field name="incident_type"/>

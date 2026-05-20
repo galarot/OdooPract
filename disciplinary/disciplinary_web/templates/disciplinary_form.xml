@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Template principal del formulario -->
-    <template id="form" name="Disciplinary Form" inherit_id="web.frontend_layout">
-        <xpath expr="//head/meta[@name='viewport']" position="after">
-            <meta name="csrf-token" t-att-content="request.csrf_token()"/>
-        </xpath>
-
-        <xpath expr="//div[@id='wrapwrap']" position="inside">
-            <div class="container-fluid py-4">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-10 col-lg-8 col-xl-6">
-                        <div class="card shadow-lg border-0">
-                            <div class="card-header bg-primary text-white py-4">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa fa-clipboard-list fa-2x me-3"></i>
-                                    <div>
-                                        <h3 class="mb-0 fw-bold">Registrar Parte Disciplinario</h3>
-                                        <small class="opacity-75">Complete el formulario para registrar una incidencia</small>
+    <!-- Nueva plantilla independiente para el formulario -->
+    <template id="disciplinary_form_page" name="Disciplinary Form Page">
+        <t t-call="web.frontend_layout">
+            <t t-set="head">
+                <meta name="csrf-token" t-att-content="request.csrf_token()"/>
+            </t>
+            <div id="wrap" class="oe_structure">
+                <div class="container py-4">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                            <div class="card shadow-lg border-0">
+                                <div class="card-header bg-primary text-white py-4">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa fa-clipboard-list fa-2x me-3"></i>
+                                        <div>
+                                            <h3 class="mb-0 fw-bold">Registrar Parte Disciplinario</h3>
+                                            <small class="opacity-75">Complete el formulario para registrar una incidencia</small>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-body p-4">
-                                <div id="disciplinary_app_root" t-att-data-props="json_dumps({'student': {'id': student.id, 'full_name': student.full_name, 'student_code': student.student_code} if student else None})">
-                                    <div class="text-center p-5">
-                                        <div class="spinner-border text-primary" role="status">
-                                            <span class="visually-hidden">Cargando...</span>
+                                <div class="card-body p-4">
+                                    <div id="disciplinary_app_root" t-att-data-props="json_dumps({'student': {'id': student.id, 'full_name': student.full_name, 'student_code': student.student_code} if student else None})">
+                                        <div class="text-center p-5" id="owl_loading_placeholder">
+                                            <div class="spinner-border text-primary" role="status"></div>
+                                            <p class="mt-2 text-muted">Cargando...</p>
                                         </div>
-                                        <p class="mt-2 text-muted">Cargando aplicación...</p>
                                     </div>
                                 </div>
                             </div>
@@ -34,56 +33,58 @@
                     </div>
                 </div>
             </div>
-        </xpath>
+        </t>
     </template>
 
-    <!-- Página de error - No autorizado -->
-    <template id="unauthorized" name="Unauthorized Error" inherit_id="web.frontend_layout">
-        <xpath expr="//div[@id='wrapwrap']" position="inside">
-            <div class="container-fluid py-5">
-                <div class="row justify-content-center">
-                    <div class="col-12 col-md-8 col-lg-6">
-                        <div class="card border-danger shadow-lg">
-                            <div class="card-header bg-danger text-white py-4">
-                                <div class="d-flex align-items-center">
-                                    <i class="fa fa-shield-alt fa-2x me-3"></i>
-                                    <div>
-                                        <h3 class="mb-0 fw-bold">Acceso Denegado</h3>
-                                        <small class="opacity-75">No tienes permisos para acceder</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body p-4">
-                                <div class="alert alert-danger border-0 shadow-sm" role="alert">
-                                    <div class="d-flex align-items-start">
-                                        <i class="fa fa-exclamation-triangle fa-2x me-3 text-danger mt-1"></i>
+    <!-- Nueva plantilla independiente para error de acceso -->
+    <template id="disciplinary_unauthorized_page" name="Disciplinary Unauthorized Page">
+        <t t-call="web.frontend_layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-8 col-lg-6">
+                            <div class="card border-danger shadow-lg">
+                                <div class="card-header bg-danger text-white py-4">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fa fa-shield-alt fa-2x me-3"></i>
                                         <div>
-                                            <h5 class="alert-heading mb-2">Permisos insuficientes</h5>
-                                            <p class="mb-3">
-                                                Solo los profesores registrados en el sistema pueden acceder a esta sección.
-                                                Si crees que es un error, contacta con el administrador del sistema.
-                                            </p>
+                                            <h3 class="mb-0 fw-bold">Acceso Denegado</h3>
+                                            <small class="opacity-75">No tienes permisos para acceder</small>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-center mt-4 d-flex flex-column flex-md-row gap-3 justify-content-center">
-                                    <a t-if="not request.session.uid" href="/web/login" class="btn btn-primary btn-lg px-4">
-                                        <i class="fa fa-sign-in-alt me-2"></i>
-                                        Iniciar Sesión
-                                    </a>
-                                    <a t-if="request.session.uid" href="/web" class="btn btn-outline-primary btn-lg px-4">
-                                        <i class="fa fa-home me-2"></i>
-                                        Ir al Panel de Odoo
-                                    </a>
-                                    <a href="mailto:admin@centro.com" class="btn btn-link text-muted">
-                                        <i class="fa fa-envelope me-1"></i> Contactar Admin
-                                    </a>
+                                <div class="card-body p-4">
+                                    <div class="alert alert-danger border-0 shadow-sm" role="alert">
+                                        <div class="d-flex align-items-start">
+                                            <i class="fa fa-exclamation-triangle fa-2x me-3 text-danger mt-1"></i>
+                                            <div>
+                                                <h5 class="alert-heading mb-2">Permisos insuficientes</h5>
+                                                <p class="mb-3">
+                                                    Solo los profesores registrados en el sistema pueden acceder a esta sección.
+                                                    Si crees que es un error, contacta con el administrador del sistema.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-4 d-flex flex-column flex-md-row gap-3 justify-content-center">
+                                        <a t-if="not request.session.uid" href="/web/login" class="btn btn-primary btn-lg px-4">
+                                            <i class="fa fa-sign-in-alt me-2"></i>
+                                            Iniciar Sesión
+                                        </a>
+                                        <a t-if="request.session.uid" href="/web" class="btn btn-outline-primary btn-lg px-4">
+                                            <i class="fa fa-home me-2"></i>
+                                            Ir al Panel de Odoo
+                                        </a>
+                                        <a href="mailto:admin@centro.com" class="btn btn-link text-muted">
+                                            <i class="fa fa-envelope me-1"></i> Contactar Admin
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </xpath>
+        </t>
     </template>
 </odoo>
